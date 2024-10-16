@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dragonscroll"
+    namespace = "com.teamoranges.dragonscroll"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.dragonscroll"
+        applicationId = "com.teamoranges.dragonscroll"
         minSdk = 26
         targetSdk = 34
         versionCode = 1

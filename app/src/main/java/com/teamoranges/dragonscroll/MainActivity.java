@@ -1,4 +1,4 @@
-package com.example.dragonscroll;
+package com.teamoranges.dragonscroll;
 
 import android.os.Bundle;
 
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             if(fragment == null)
                 return false;
 
-            // Replace fragment view with selected fragment if selection valid 
+            // Replace fragment view with selected fragment if selection valid
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainerView, fragment);
             transaction.commit();

@@ -1,4 +1,4 @@
-package com.example.dragonscroll;
+package com.teamoranges.dragonscroll;
 
 import android.os.Bundle;
 
