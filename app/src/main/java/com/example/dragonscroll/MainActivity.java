@@ -29,20 +29,26 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        // Handle bottom navigation
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        // Add an item selection listener to the bottom nav view
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment fragment = null;
+            int itemId = item.getItemId();
 
-            if(item.getItemId() == R.id.navigation_home)
+            // Item IDs aren't constant so we cant use a switch :(
+            if(itemId == R.id.navigation_home)
                 fragment = new HomeFragment();
-            else if(item.getItemId() == R.id.navigation_profile)
+            else if(itemId == R.id.navigation_profile)
                 fragment = new ProfileFragment();
-            else if(item.getItemId() == R.id.navigation_settings)
+            else if(itemId == R.id.navigation_settings)
                 fragment = new SettingsFragment();
 
+            // Do nothing if no valid selection
             if(fragment == null)
                 return false;
 
+            // Replace fragment view with selected fragment if selection valid 
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainerView, fragment);
             transaction.commit();
