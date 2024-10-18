@@ -9,4 +9,30 @@
         <item>reply</item>
         <item>reply_all</item>
     </string-array>
+
+    <!-- Text Size Preference -->
+    <string-array name="text_size_entries">
+        <item>Default</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="text_size_values">
+        <item>text_default</item>
+        <item>text_small</item>
+        <item>text_medium</item>
+        <item>text_large</item>
+    </string-array>
+
+    <!-- Theme Preference -->
+    <string-array name="themes_entries">
+        <item>Default</item>
+        <item>TODO</item>
+    </string-array>
+
+    <string-array name="themes_values">
+        <item>theme_default</item>
+        <item>theme_todo</item>
+    </string-array>
 </resources>
