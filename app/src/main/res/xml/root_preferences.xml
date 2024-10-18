@@ -2,26 +2,26 @@
 
     <SwitchPreferenceCompat
         app:key="dark_mode_preference"
-        app:title="Dark Mode"/>
+        app:title="@string/dark_mode_title"/>
 
     <SwitchPreferenceCompat
         app:key="high_contrast_preference"
-        app:title="High Contrast"/>
+        app:title="@string/high_contrast_title"/>
 
     <ListPreference
         app:key="text_size_preference"
         app:entries="@array/text_size_entries"
         app:entryValues="@array/text_size_values"
-        app:title="Text Size"/>
+        app:title="@string/text_size_title"/>
 
     <ListPreference
-        app:key="theme_preference"
-        app:entries="@array/theme_entries"
-        app:entryValues="@array/theme_values"
-        app:title="Theme"/>
+        app:key="themes_preference"
+        app:entries="@array/themes_entries"
+        app:entryValues="@array/themes_values"
+        app:title="@string/themes_title"/>
 
     <Preference
-        app:key="cache_preference"
-        app:title="Clear Cache"/>
+        app:key="clear_cache_preference"
+        app:title="@string/clear_cache_title"/>
 
 </PreferenceScreen>
