@@ -19,16 +19,21 @@
 
     <!-- Dark Mode Preferences -->
     <string name="dark_mode_title">Dark Mode</string>
+    <string name="dark_mode_summary">Toggle between dark and light mode</string>
 
     <!-- High Contrast Preferences -->
     <string name="high_contrast_title">High Contrast</string>
+    <string name="high_contrast_summary">Toggle high contrast mode</string>
 
     <!-- Text Size Preferences -->
     <string name="text_size_title">Text Size</string>
+    <string name="text_size_summary">Change text size</string>
 
     <!-- Themes Preferences -->
     <string name="themes_title">Themes</string>
+    <string name="themes_summary">Change theme</string>
 
     <!-- Clear Cache Preferences -->
     <string name="clear_cache_title">Clear Cache</string>
+    <string name="clear_cache_summary">Clear application cache</string>
 </resources>
