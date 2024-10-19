@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView
-            // I don't know why, but we're removing it for now
+            // I don't know why, but we're removing it for now.
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
@@ -36,10 +36,9 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
         // Get NavController from NavHostFragment
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
         NavController navController = navHostFragment.getNavController();
-
-        // AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(R.id.homeFragment, R.id.profileFragment, R.id.settingsFragment).build();
 
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
