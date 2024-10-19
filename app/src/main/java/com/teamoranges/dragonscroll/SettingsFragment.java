@@ -14,20 +14,25 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
 
-        Preference clearCachePref = findPreference(getString(R.string.clear_cache_key));
-        if (clearCachePref == null)
-            return;
-
+        // Get Context
         Context context = requireContext();
+
+        // Get SharedPrefs
         SharedPreferences sharedPreferences =
                 context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
 
-        clearCachePref.setOnPreferenceClickListener((preference) -> {
-            Log.i("SettingsFragment", "Clear cache pressed");
+        // Get clear preferences button
+        Preference clearPrefsButton = findPreference(getString(R.string.clear_prefs_key));
+        if (clearPrefsButton == null)
+            return;
+
+        // Set clear prefs button onclick
+        clearPrefsButton.setOnPreferenceClickListener((preference) -> {
+            // Clear SharedPrefs 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
-            
+
             return true;
         });
     }
