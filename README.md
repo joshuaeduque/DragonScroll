@@ -1,2 +1,2 @@
 # DragonScroll
-Personal book logger for Android
+Personal book logger for Android 📖
