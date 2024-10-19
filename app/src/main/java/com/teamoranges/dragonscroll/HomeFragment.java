@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.teamoranges.dragonscroll.models.BookModel;
+
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,13 +34,6 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
-    String[] fakeEntries = {
-            "Book 1", "Book 2", "Book 3", "Book 4",
-            "Book 5", "Book 6", "Book 7", "Book 8",
-            "Book 9", "Book 10", "Book 11", "Book 12"
-    };
-    ArrayAdapter<String> arrayAdapter;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +57,10 @@ public class HomeFragment extends Fragment {
         return fragment;
     }
 
+    private RecyclerView recyclerView;
+    private BookAdapter bookAdapter;
+    private List<BookModel> bookList;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,10 +68,6 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-
-        Context context = requireContext();
-
-        arrayAdapter = new ArrayAdapter<>(context, R.layout.home_listview, fakeEntries);
     }
 
     @Override
@@ -76,9 +75,28 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        Context context = requireContext();
 
-        ListView listView = view.findViewById(R.id.listView);
-        listView.setAdapter(arrayAdapter);
+        // Setup RecyclerView
+        recyclerView = view.findViewById(R.id.recyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+        // Setup List of BookModel with fake data
+        bookList = new ArrayList<BookModel>();
+        bookList.add(new BookModel("Book Title", "Book Author"));
+        bookList.add(new BookModel("1984", "George Orwell"));
+        bookList.add(new BookModel("Charlotte's Web", "E. B. White"));
+        bookList.add(new BookModel("World War Z", "Max Brooks"));
+        bookList.add(new BookModel("Animal Farm", "George Orwell"));
+        bookList.add(new BookModel("Dracula", "Bram Stoker"));
+        bookList.add(new BookModel("Iliad", "Homer"));
+        bookList.add(new BookModel("Adventures of Huckleberry Finn", "Mark Twain"));
+        bookList.add(new BookModel("Lord of the Flies", "William Golding"));
+        bookList.add(new BookModel("The Cat in the Hat", "Dr. Seuss"));
+
+        // Setup BookAdapter with RecyclerView
+        bookAdapter = new BookAdapter(bookList);
+        recyclerView.setAdapter(bookAdapter);
 
         return view;
     }
