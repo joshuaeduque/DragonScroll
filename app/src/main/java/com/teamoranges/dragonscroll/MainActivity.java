@@ -18,6 +18,7 @@ import androidx.navigation.ui.NavigationUI;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
+    private final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +36,17 @@ public class MainActivity extends AppCompatActivity {
         // Get BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        // Get NavController from NavHostFragment
+        // Try getting NavController from NavHostFragment
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
-        NavController navController = navHostFragment.getNavController();
 
+        if(navHostFragment == null)
+        {
+            Log.e(TAG, "Failed to get NavigationHostFragment");
+            return;
+        }
+
+        NavController navController = navHostFragment.getNavController();
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }
