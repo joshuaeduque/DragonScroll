@@ -105,6 +105,10 @@ public class ProfileFragment extends Fragment {
                 // Get text in EditText
                 String editedText = String.valueOf(editText.getText());
 
+                // Validate text
+                if(editedText.trim().isEmpty())
+                    return;
+
                 // Set text of TextView with user profile name
                 profileTextView.setText(editedText);
 
