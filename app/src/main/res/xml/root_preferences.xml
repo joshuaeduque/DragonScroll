@@ -25,7 +25,7 @@
         app:title="@string/themes_title"/>
 
     <Preference
-        app:key="clear_cache_preference"
+        app:key="@string/clear_cache_key"
         app:summary="@string/clear_cache_summary"
         app:title="@string/clear_cache_title"/>
 
