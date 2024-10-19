@@ -8,11 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,14 +36,14 @@ public class MainActivity extends AppCompatActivity {
         // Try getting NavController from NavHostFragment
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
-
         if(navHostFragment == null)
         {
             Log.e(TAG, "Failed to get NavigationHostFragment");
             return;
         }
-
         NavController navController = navHostFragment.getNavController();
+
+        // Setup NavigationUI with the BottomNavigationView and NavController
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
 }
