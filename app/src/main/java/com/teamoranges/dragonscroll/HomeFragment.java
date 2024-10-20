@@ -7,9 +7,11 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -95,7 +97,9 @@ public class HomeFragment extends Fragment {
         bookList.add(new BookModel("The Cat in the Hat", "Dr. Seuss"));
 
         // Setup BookAdapter with RecyclerView
-        bookAdapter = new BookAdapter(bookList);
+        bookAdapter = new BookAdapter(bookList, (book, position) -> {
+            Log.i("HomeFragment", String.format("%s at pos %d", book.getTitle(), position));
+        });
         recyclerView.setAdapter(bookAdapter);
 
         return view;

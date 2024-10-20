@@ -1,8 +1,10 @@
 package com.teamoranges.dragonscroll;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,9 +17,11 @@ import java.util.List;
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
     private final List<BookModel> bookList;
+    private final OnBookClickListener listener;
 
-    public BookAdapter(List<BookModel> bookList) {
+    public BookAdapter(List<BookModel> bookList, OnBookClickListener listener) {
         this.bookList = bookList;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,6 +36,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         BookModel book = bookList.get(position);
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
+
+        holder.itemView.setOnClickListener((view) -> {
+            listener.onBookClick(book, position);
+        });
     }
 
     @Override
@@ -40,7 +48,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     }
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
-        private TextView title, author;
+        private final TextView title, author;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
