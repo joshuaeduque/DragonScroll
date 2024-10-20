@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +22,7 @@ import com.teamoranges.dragonscroll.models.BookModel;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +30,8 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
+
+    private final String TAG = "HomeFragment";
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -62,6 +67,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
     private List<BookModel> bookList;
+    private NavController navController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,6 +76,18 @@ public class HomeFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        // Try getting NavController from NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
+                .getSupportFragmentManager()
+                .findFragmentById(R.id.navHostFragment);
+
+        if (navHostFragment == null) {
+            Log.e(TAG, "Failed to get NavigationHostFragment");
+            return;
+        }
+
+        navController = navHostFragment.getNavController();
     }
 
     @Override
@@ -99,6 +117,7 @@ public class HomeFragment extends Fragment {
         // Setup BookAdapter with RecyclerView
         bookAdapter = new BookAdapter(bookList, (book, position) -> {
             Log.i("HomeFragment", String.format("%s at pos %d", book.getTitle(), position));
+            navController.navigate(R.id.navigation_book);
         });
         recyclerView.setAdapter(bookAdapter);
 
