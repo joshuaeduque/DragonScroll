@@ -116,8 +116,14 @@ public class HomeFragment extends Fragment {
 
         // Setup BookAdapter with RecyclerView
         bookAdapter = new BookAdapter(bookList, (book, position) -> {
-            Log.i("HomeFragment", String.format("%s at pos %d", book.getTitle(), position));
-            navController.navigate(R.id.navigation_book);
+            String title = book.getTitle();
+
+            Log.i("HomeFragment", String.format("Clicked %s at pos %d", title, position));
+
+            Bundle bundle = new Bundle();
+            bundle.putString("bookTitle", title);
+
+            navController.navigate(R.id.navigation_book, bundle);
         });
         recyclerView.setAdapter(bookAdapter);
 
