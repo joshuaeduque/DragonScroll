@@ -14,6 +14,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
 
@@ -24,24 +26,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView
-            // I don't know why, but we're removing it for now.
+            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView.
+            // I don't know why it does, but we're removing it for now.
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
             return insets;
         });
 
-        // Get BottomNavigationView
+        // Get the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
 
-        // Try getting NavController from NavHostFragment
+        // Get the NavHostFragment
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
-        if(navHostFragment == null)
-        {
-            Log.e(TAG, "Failed to get NavigationHostFragment");
-            return;
-        }
-        NavController navController = navHostFragment.getNavController();
+        // Get the NavController from the NavHostFragment 
+        NavController navController = Objects.requireNonNull(navHostFragment).getNavController();
 
         // Setup NavigationUI with the BottomNavigationView and NavController
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
