@@ -68,12 +68,17 @@ public class ProfileFragment extends Fragment {
         // Get Context
         context = requireContext();
 
-        // Get SharedPrefs
-        sharedPrefs = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        // Get SharedPreferences
+        sharedPrefs = context.getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
 
-        // Get user profile name from SharedPrefs or the default profile name
-        String defaultProfileName = getString(R.string.profile_name_default);
-        profileName = sharedPrefs.getString(getString(R.string.profile_name_key), defaultProfileName);
+        // Get profile name from SharedPreferences or default
+        profileName = sharedPrefs.getString(
+                getString(R.string.profile_name_key),
+                getString(R.string.profile_name_default)
+        );
     }
 
     @Override
@@ -82,15 +87,15 @@ public class ProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        // Get TextView with user profile name
-        TextView profileTextView = view.findViewById(R.id.profileTextView);
+        // Get profile name TextView
+        TextView profileNameTextView = view.findViewById(R.id.profileNameTextView);
 
         // Set profile name
-        profileTextView.setText(profileName);
-        profileTextView.setClickable(true);
+        profileNameTextView.setText(this.profileName);
+        profileNameTextView.setClickable(true);
 
-        // Set profile name on click listener
-        profileTextView.setOnClickListener(pv -> {
+        // Set profile name TextView on click listener
+        profileNameTextView.setOnClickListener(profileNameView -> {
             // Create EditText for user input
             final EditText editText = new EditText(context);
             editText.setHint("Profile name");
@@ -100,27 +105,32 @@ public class ProfileFragment extends Fragment {
                     .setMessage("Enter a new profile name")
                     .setView(editText);
 
-            // Set AlertDialog positive button onclick
+            // Set AlertDialog positive button on click listener
             alert.setPositiveButton("Save", (dialog, button) -> {
-                // Get text in EditText
-                String editedText = String.valueOf(editText.getText());
+                // Get EditText text
+                String editTextValue = String.valueOf(editText.getText());
 
-                // Validate text
-                if(editedText.trim().isEmpty())
+                // Validate EditText text.
+                // If it's empty, just return without doing anything.
+                if (editTextValue.trim().isEmpty())
                     return;
 
                 // Set text of TextView with user profile name
-                profileTextView.setText(editedText);
+                profileNameTextView.setText(editTextValue);
 
-                // Save new profile name to SharedPrefs
+                // Save new profile name to SharedPreferences
                 SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(getString(R.string.profile_name_key), editedText);
+                editor.putString(
+                        getString(R.string.profile_name_key),
+                        editTextValue);
                 editor.apply();
             });
 
-            // Set AlertDialog negative button empty onclick
+            // Give AlertDialog negative button and empty on click listener
             alert.setNegativeButton("Cancel", (dialog, button) -> {
-                // Do nothing
+                // The negative button needs an empty on click listener
+                // otherwise it won't show at all.
+                // There's probably a better way to do this lmao.
             });
 
             // Show the AlertDialog 
