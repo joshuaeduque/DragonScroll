@@ -33,15 +33,17 @@ public class BookFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment BookFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BookFragment newInstance(String param1, String param2) {
+    public static BookFragment newInstance(String param1) {
         BookFragment fragment = new BookFragment();
+
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
+
         fragment.setArguments(args);
+
         return fragment;
     }
 
