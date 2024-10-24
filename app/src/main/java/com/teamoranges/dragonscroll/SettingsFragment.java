@@ -30,7 +30,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         // Set clear prefs button onclick
         clearPrefsButton.setOnPreferenceClickListener((preference) -> {
-            // Clear SharedPreferences 
+            // Clear SharedPreferences
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();

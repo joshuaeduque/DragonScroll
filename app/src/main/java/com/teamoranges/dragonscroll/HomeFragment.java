@@ -95,13 +95,15 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        // Get Context
         Context context = requireContext();
 
         // Setup RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Setup List of BookModel with fake data
+        // Create book list with fake data
         bookList = new ArrayList<BookModel>();
         bookList.add(new BookModel("Book Title", "Book Author"));
         bookList.add(new BookModel("1984", "George Orwell"));
@@ -116,17 +118,15 @@ public class HomeFragment extends Fragment {
 
         // Setup BookAdapter with RecyclerView
         bookAdapter = new BookAdapter(bookList, (book, position) -> {
-            String title = book.getTitle();
-            String author = book.getAuthor();
-
-            Log.i("HomeFragment", String.format("Clicked %s at pos %d", title, position));
-
             Bundle bundle = new Bundle();
-            bundle.putString("bookTitle", title);
-            bundle.putString("bookAuthor", author);
+            bundle.putString("bookTitle", book.getTitle());
+            bundle.putString("bookAuthor", book.getAuthor());
 
+            // Navigate to BookFragment with book data
             navController.navigate(R.id.navigation_book, bundle);
         });
+
+        // Setup RecyclerView with BookAdapter 
         recyclerView.setAdapter(bookAdapter);
 
         return view;
