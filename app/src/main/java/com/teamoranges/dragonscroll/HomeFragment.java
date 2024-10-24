@@ -117,11 +117,13 @@ public class HomeFragment extends Fragment {
         // Setup BookAdapter with RecyclerView
         bookAdapter = new BookAdapter(bookList, (book, position) -> {
             String title = book.getTitle();
+            String author = book.getAuthor();
 
             Log.i("HomeFragment", String.format("Clicked %s at pos %d", title, position));
 
             Bundle bundle = new Bundle();
             bundle.putString("bookTitle", title);
+            bundle.putString("bookAuthor", author);
 
             navController.navigate(R.id.navigation_book, bundle);
         });

@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,12 @@ public class BookFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "bookTitle";
+    private static final String BOOK_TITLE_KEY = "bookTitle";
+    private static final String BOOK_AUTHOR_KEY = "bookAuthor";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String bookTitleParam;
+    private String bookAuthorParam;
 
     public BookFragment() {
         // Required empty public constructor
@@ -32,15 +33,16 @@ public class BookFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
+     * @param bookTitle Parameter 1.
      * @return A new instance of fragment BookFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BookFragment newInstance(String param1) {
+    public static BookFragment newInstance(String bookTitle, String bookAuthor) {
         BookFragment fragment = new BookFragment();
 
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(BOOK_TITLE_KEY, bookTitle);
+        args.putString(BOOK_AUTHOR_KEY, bookAuthor);
 
         fragment.setArguments(args);
 
@@ -51,7 +53,8 @@ public class BookFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            bookTitleParam = getArguments().getString(BOOK_TITLE_KEY);
+            bookAuthorParam = getArguments().getString(BOOK_AUTHOR_KEY);
         }
     }
 
@@ -61,8 +64,15 @@ public class BookFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
 
-        TextView textView = view.findViewById(R.id.textView);
-        textView.setText(mParam1 != null ? mParam1 : "mParam1 is null :(");
+        if(bookTitleParam != null) {
+            TextView bookTitleView = view.findViewById(R.id.bookTitle);
+            bookTitleView.setText(bookTitleParam);
+        }
+
+        if(bookAuthorParam != null) {
+            TextView bookAuthorView = view.findViewById(R.id.bookAuthor);
+            bookAuthorView.setText(bookAuthorParam);
+        }
 
         return view;
     }
