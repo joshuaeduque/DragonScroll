@@ -34,11 +34,14 @@ public class MainActivity extends AppCompatActivity {
         // Get the BottomNavigationView
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
 
-        // Get the NavHostFragment
-        NavHostFragment navHostFragment =
-                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        // Try getting NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navHostFragment);
+        if (navHostFragment == null)
+            return;
+
         // Get the NavController from the NavHostFragment
-        NavController navController = Objects.requireNonNull(navHostFragment).getNavController();
+        NavController navController = navHostFragment.getNavController();
 
         // Setup NavigationUI with the BottomNavigationView and NavController
         NavigationUI.setupWithNavController(bottomNavigationView, navController);

@@ -17,18 +17,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // Get Context
         Context context = requireContext();
 
-        // Get SharedPrefs
-        SharedPreferences sharedPreferences =
-                context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        // Get SharedPreferences
+        SharedPreferences sharedPreferences = context.getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
 
-        // Get clear preferences button
+        // Try getting clear preferences button
         Preference clearPrefsButton = findPreference(getString(R.string.clear_prefs_key));
         if (clearPrefsButton == null)
             return;
 
         // Set clear prefs button onclick
         clearPrefsButton.setOnPreferenceClickListener((preference) -> {
-            // Clear SharedPrefs 
+            // Clear SharedPreferences 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
