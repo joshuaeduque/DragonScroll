@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">DragonScroll</string>
+    
+    <string name="books_read_default">Books Read: 0</string>
+    <string name="books_reading_default">Books Reading: 0</string>
+    <string name="time_reading_default">Time Spent Reading: 0d 0h 0m 0s</string>
+    <string name="favorite_book_default">Favorite Book: none</string>
+
+    <string name="profile_image_description">User profile image</string>
 
     <!-- SharedPreferences Keys -->
     <string name="preference_file_key">com.teamoranges.dragonscroll.PREFERENCE_FILE</string>

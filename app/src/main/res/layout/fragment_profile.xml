@@ -11,12 +11,13 @@
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/profileImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="128dp"
             android:minWidth="128dp"
             android:minHeight="128dp"
+            android:contentDescription="@string/profile_image_description"
             android:src="@android:drawable/sym_def_app_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -31,47 +32,47 @@
             android:text="@string/profile_name_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/booksReadTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Books Read: 0"
+            android:text="@string/books_read_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileNameTextView" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/booksReadingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Books Reading: 0"
+            android:text="@string/books_reading_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            app:layout_constraintTop_toBottomOf="@+id/booksReadTextView" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/timeReadingTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Time Spent Reading: 0d 0h 0m 0s"
+            android:text="@string/time_reading_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView4" />
+            app:layout_constraintTop_toBottomOf="@+id/booksReadingTextView" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/favoriteBookTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:text="Favorite Book: 1984"
+            android:text="@string/favorite_book_default"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5" />
+            app:layout_constraintTop_toBottomOf="@+id/timeReadingTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
