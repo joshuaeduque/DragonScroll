@@ -1,7 +1,6 @@
 package com.teamoranges.dragonscroll;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Get the BottomNavigationView
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
 
         // Get the NavHostFragment
         NavHostFragment navHostFragment =
                 (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
-        // Get the NavController from the NavHostFragment 
+        // Get the NavController from the NavHostFragment
         NavController navController = Objects.requireNonNull(navHostFragment).getNavController();
 
         // Setup NavigationUI with the BottomNavigationView and NavController
