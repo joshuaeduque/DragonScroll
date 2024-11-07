@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.teamoranges.dragonscroll.models.Book;
 
@@ -64,15 +65,14 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        // Get Activity BookDao
         BookDao bookDao = ((MainActivity)getActivity()).getBookDao();
+        // Populate book list from BookDao
         List<Book> bookList = bookDao.getAll();
 
-        if(bookList.isEmpty()) {
-            Book book = new Book();
-            book.setTitle("World War Z");
-            book.setAuthor("Max Brooks");
-            bookList.add(book);
-        }
+        // If no books in list, show empty text
+        TextView noBooksTextView = view.findViewById(R.id.noBooksTextView);
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.GONE : View.VISIBLE);
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
