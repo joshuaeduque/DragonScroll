@@ -72,7 +72,7 @@ public class HomeFragment extends Fragment {
 
         // If no books in list, show empty text
         TextView noBooksTextView = view.findViewById(R.id.noBooksTextView);
-        noBooksTextView.setVisibility(bookList.isEmpty() ? View.GONE : View.VISIBLE);
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
