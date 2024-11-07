@@ -15,10 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamoranges.dragonscroll.models.Book;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeFragment extends Fragment {
 
@@ -87,6 +88,18 @@ public class HomeFragment extends Fragment {
 
         // Setup RecyclerView with BookAdapter 
         recyclerView.setAdapter(bookAdapter);
+
+        // Set FloatingActionButton on click listener
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(v -> {
+            Book book = new Book();
+            book.setTitle("New Book");
+            book.setAuthor("Book Author");
+            bookDao.insertAll(book);
+
+            bookList.add(book);
+            bookAdapter.notifyDataSetChanged();
+        });
 
         return view;
     }
