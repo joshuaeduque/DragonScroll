@@ -64,18 +64,15 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Create book list with fake data
-        List<Book> bookList = new ArrayList<Book>();
-        bookList.add(new Book("Book Title", "Book Author"));
-        bookList.add(new Book("1984", "George Orwell"));
-        bookList.add(new Book("Charlotte's Web", "E. B. White"));
-        bookList.add(new Book("World War Z", "Max Brooks"));
-        bookList.add(new Book("Animal Farm", "George Orwell"));
-        bookList.add(new Book("Dracula", "Bram Stoker"));
-        bookList.add(new Book("Iliad", "Homer"));
-        bookList.add(new Book("Adventures of Huckleberry Finn", "Mark Twain"));
-        bookList.add(new Book("Lord of the Flies", "William Golding"));
-        bookList.add(new Book("The Cat in the Hat", "Dr. Seuss"));
+        BookDao bookDao = ((MainActivity)getActivity()).getBookDao();
+        List<Book> bookList = bookDao.getAll();
+
+        if(bookList.isEmpty()) {
+            Book book = new Book();
+            book.setTitle("World War Z");
+            book.setAuthor("Max Brooks");
+            bookList.add(book);
+        }
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
