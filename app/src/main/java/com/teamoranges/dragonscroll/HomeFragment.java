@@ -28,15 +28,6 @@ public class HomeFragment extends Fragment {
 
     private final String TAG = "HomeFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -52,25 +43,14 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
-    private RecyclerView recyclerView;
-    private BookAdapter bookAdapter;
-    private List<Book> bookList;
     private NavController navController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // Try getting NavController from NavHostFragment
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
@@ -95,11 +75,11 @@ public class HomeFragment extends Fragment {
         Context context = requireContext();
 
         // Setup RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Create book list with fake data
-        bookList = new ArrayList<Book>();
+        List<Book> bookList = new ArrayList<Book>();
         bookList.add(new Book("Book Title", "Book Author"));
         bookList.add(new Book("1984", "George Orwell"));
         bookList.add(new Book("Charlotte's Web", "E. B. White"));
@@ -112,7 +92,8 @@ public class HomeFragment extends Fragment {
         bookList.add(new Book("The Cat in the Hat", "Dr. Seuss"));
 
         // Setup BookAdapter with RecyclerView
-        bookAdapter = new BookAdapter(bookList, (book, position) -> {
+        // Navigate to BookFragment with book data
+        BookAdapter bookAdapter = new BookAdapter(bookList, (book, position) -> {
             Bundle bundle = new Bundle();
             bundle.putString("bookTitle", book.getTitle());
             bundle.putString("bookAuthor", book.getAuthor());

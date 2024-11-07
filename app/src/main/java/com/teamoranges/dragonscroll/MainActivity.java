@@ -15,8 +15,6 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
 
@@ -42,18 +40,20 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment == null)
             return;
 
+        // Create an AppBarConfiguration
         AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
         ).build();
 
+        // Set activity toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         // Get the NavController from the NavHostFragment
         NavController navController = navHostFragment.getNavController();
 
+        // Setup NavigationUI with our AppBarConfiguration
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
-
         // Setup NavigationUI with the BottomNavigationView and NavController
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
     }
