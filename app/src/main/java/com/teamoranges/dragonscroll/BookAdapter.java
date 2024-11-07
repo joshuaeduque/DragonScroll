@@ -1,5 +1,6 @@
 package com.teamoranges.dragonscroll;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,16 @@ import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
-    private final List<Book> bookList;
-    private final OnBookClickListener listener;
+    private static final String TAG = "BookAdapter";
 
-    public BookAdapter(List<Book> bookList, OnBookClickListener listener) {
+    private final List<Book> bookList;
+    private final OnBookClickListener onClickListener;
+    private final OnBookLongClickListener onLongClickListener;
+
+    public BookAdapter(List<Book> bookList, OnBookClickListener onClickListener, OnBookLongClickListener onLongClickListener) {
         this.bookList = bookList;
-        this.listener = listener;
+        this.onClickListener = onClickListener;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @NonNull
@@ -38,8 +43,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
 
-        holder.itemView.setOnClickListener((view) -> {
-            listener.onBookClick(book, position);
+        holder.itemView.setOnClickListener(view -> {
+            onClickListener.onBookClick(book, position);
+        });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            return onLongClickListener.onBookLongClick(book, position);
         });
     }
 

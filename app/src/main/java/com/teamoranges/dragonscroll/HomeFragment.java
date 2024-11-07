@@ -67,7 +67,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Get Activity BookDao
-        BookDao bookDao = ((MainActivity)getActivity()).getBookDao();
+        BookDao bookDao = ((MainActivity) getActivity()).getBookDao();
         // Populate book list from BookDao
         List<Book> bookList = bookDao.getAll();
 
@@ -77,13 +77,22 @@ public class HomeFragment extends Fragment {
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
-        BookAdapter bookAdapter = new BookAdapter(bookList, (book, position) -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("bookTitle", book.getTitle());
-            bundle.putString("bookAuthor", book.getAuthor());
+        BookAdapter bookAdapter = new BookAdapter(bookList, new OnBookClickListener() {
+            @Override
+            public void onBookClick(Book book, int position) {
+                Bundle bundle = new Bundle();
+                bundle.putString("bookTitle", book.getTitle());
+                bundle.putString("bookAuthor", book.getAuthor());
 
-            // Navigate to BookFragment with book data
-            navController.navigate(R.id.navigation_book, bundle);
+                // Navigate to BookFragment with book data
+                navController.navigate(R.id.navigation_book, bundle);
+            }
+        }, new OnBookLongClickListener() {
+            @Override
+            public boolean onBookLongClick(Book book, int position) {
+                Log.i(TAG, String.format("Long click %d %s", position, book.getTitle()));
+                return true;
+            }
         });
 
         // Setup RecyclerView with BookAdapter 
@@ -92,12 +101,15 @@ public class HomeFragment extends Fragment {
         // Set FloatingActionButton on click listener
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(v -> {
+            // Add new book to database
             Book book = new Book();
             book.setTitle("New Book");
             book.setAuthor("Book Author");
             bookDao.insertAll(book);
 
+            // Update data set
             bookList.add(book);
+            // Notify BookAdapter (this is bad but oh well no time)
             bookAdapter.notifyDataSetChanged();
         });
 
