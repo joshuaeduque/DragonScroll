@@ -1,6 +1,7 @@
 package com.teamoranges.dragonscroll;
 
 import android.os.Bundle;
+import android.widget.Toolbar;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
                 .findFragmentById(R.id.navHostFragment);
         if (navHostFragment == null)
             return;
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
 
         // Get the NavController from the NavHostFragment
         NavController navController = navHostFragment.getNavController();
