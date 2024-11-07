@@ -13,16 +13,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.teamoranges.dragonscroll.models.BookModel;
+import com.teamoranges.dragonscroll.models.Book;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,7 +61,7 @@ public class HomeFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private BookAdapter bookAdapter;
-    private List<BookModel> bookList;
+    private List<Book> bookList;
     private NavController navController;
 
     @Override
@@ -104,17 +99,17 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Create book list with fake data
-        bookList = new ArrayList<BookModel>();
-        bookList.add(new BookModel("Book Title", "Book Author"));
-        bookList.add(new BookModel("1984", "George Orwell"));
-        bookList.add(new BookModel("Charlotte's Web", "E. B. White"));
-        bookList.add(new BookModel("World War Z", "Max Brooks"));
-        bookList.add(new BookModel("Animal Farm", "George Orwell"));
-        bookList.add(new BookModel("Dracula", "Bram Stoker"));
-        bookList.add(new BookModel("Iliad", "Homer"));
-        bookList.add(new BookModel("Adventures of Huckleberry Finn", "Mark Twain"));
-        bookList.add(new BookModel("Lord of the Flies", "William Golding"));
-        bookList.add(new BookModel("The Cat in the Hat", "Dr. Seuss"));
+        bookList = new ArrayList<Book>();
+        bookList.add(new Book("Book Title", "Book Author"));
+        bookList.add(new Book("1984", "George Orwell"));
+        bookList.add(new Book("Charlotte's Web", "E. B. White"));
+        bookList.add(new Book("World War Z", "Max Brooks"));
+        bookList.add(new Book("Animal Farm", "George Orwell"));
+        bookList.add(new Book("Dracula", "Bram Stoker"));
+        bookList.add(new Book("Iliad", "Homer"));
+        bookList.add(new Book("Adventures of Huckleberry Finn", "Mark Twain"));
+        bookList.add(new Book("Lord of the Flies", "William Golding"));
+        bookList.add(new Book("The Cat in the Hat", "Dr. Seuss"));
 
         // Setup BookAdapter with RecyclerView
         bookAdapter = new BookAdapter(bookList, (book, position) -> {

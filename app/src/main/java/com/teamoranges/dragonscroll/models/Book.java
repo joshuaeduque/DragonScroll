@@ -1,9 +1,9 @@
 package com.teamoranges.dragonscroll.models;
 
-public class BookModel {
+public class Book {
     private final String title, author;
 
-    public BookModel(String title, String author) {
+    public Book(String title, String author) {
         this.title = title;
         this.author = author;
     }
