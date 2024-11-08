@@ -1,10 +1,8 @@
 package com.teamoranges.dragonscroll;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,12 +48,20 @@ public class BookFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
-        
+
+        // Get BookDAO from MainActivity
         bookDao = ((MainActivity)requireActivity()).getBookDao();
+
+        // Get Book by ID from database
         book = bookDao.getBook(bookIdParam);
 
-        // Hacky for now
-        ((TextView)(view.findViewById(R.id.bookTitle))).setText(book.getTitle());
+        TextView titleTextView = view.findViewById(R.id.titleTextView);
+        TextView authorTextView = view.findViewById(R.id.authorTextView);
+        TextView ratingTextView = view.findViewById(R.id.ratingTextView);
+
+        titleTextView.setText(book.getTitle());
+        authorTextView.setText(book.getAuthor());
+        ratingTextView.setText(String.format("Rating: %d/5", book.getRating()));
 
         return view;
     }
