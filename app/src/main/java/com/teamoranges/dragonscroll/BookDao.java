@@ -1,6 +1,7 @@
 package com.teamoranges.dragonscroll;
 
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 
@@ -15,4 +16,7 @@ public interface BookDao {
 
     @Insert
     void insertAll(Book... books);
+
+    @Delete
+    void delete(Book book);
 }

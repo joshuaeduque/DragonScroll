@@ -1,5 +1,6 @@
 package com.teamoranges.dragonscroll;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -26,6 +27,11 @@ public class HomeFragment extends Fragment {
     private static final String TAG = "HomeFragment";
 
     private NavController navController;
+    private Context context;
+    private BookDao bookDao;
+    private List<Book> bookList;
+    private BookAdapter bookAdapter;
+    private TextView noBooksTextView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -60,39 +66,32 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Get Context
-        Context context = requireContext();
+        context = requireContext();
 
         // Setup RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Get Activity BookDao
-        BookDao bookDao = ((MainActivity) getActivity()).getBookDao();
+        bookDao = ((MainActivity) getActivity()).getBookDao();
         // Populate book list from BookDao
-        List<Book> bookList = bookDao.getAll();
+        bookList = bookDao.getAll();
 
         // If no books in list, show empty text
-        TextView noBooksTextView = view.findViewById(R.id.noBooksTextView);
-        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+        noBooksTextView = view.findViewById(R.id.noBooksTextView);
+        updateNoBooksTextViewVisibility();
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
-        BookAdapter bookAdapter = new BookAdapter(bookList, new OnBookClickListener() {
-            @Override
-            public void onBookClick(Book book, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putString("bookTitle", book.getTitle());
-                bundle.putString("bookAuthor", book.getAuthor());
+        bookAdapter = new BookAdapter(bookList, (book, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("bookTitle", book.getTitle());
+            bundle.putString("bookAuthor", book.getAuthor());
 
-                // Navigate to BookFragment with book data
-                navController.navigate(R.id.navigation_book, bundle);
-            }
-        }, new OnBookLongClickListener() {
-            @Override
-            public boolean onBookLongClick(Book book, int position) {
-                Log.i(TAG, String.format("Long click %d %s", position, book.getTitle()));
-                return true;
-            }
+            // Navigate to BookFragment with book data
+            navController.navigate(R.id.navigation_book, bundle);
+        }, (book, position) -> {
+            return onBookLongClick(book, position);
         });
 
         // Setup RecyclerView with BookAdapter 
@@ -111,8 +110,38 @@ public class HomeFragment extends Fragment {
             bookList.add(book);
             // Notify BookAdapter (this is bad but oh well no time)
             bookAdapter.notifyDataSetChanged();
+            updateNoBooksTextViewVisibility();
         });
 
         return view;
+    }
+
+    private void updateNoBooksTextViewVisibility() {
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private boolean onBookLongClick(Book book, int position) {
+        // Create delete AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                .setMessage(String.format("Delete %s?", book.getTitle()));
+
+        // Set AlertDialog positive button
+        alert.setPositiveButton("Delete", (dialogInterface, i) -> {
+            bookDao.delete(book);
+            bookList.remove(book);
+            // Bad bad bad
+            bookAdapter.notifyDataSetChanged();
+            updateNoBooksTextViewVisibility();
+        });
+
+        // Set AlertDialog negative button
+        alert.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            // Empty lambda lol
+        });
+
+        // Show AlertDialog
+        alert.show();
+
+        return false;
     }
 }
