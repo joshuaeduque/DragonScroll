@@ -144,14 +144,16 @@ public class HomeFragment extends Fragment {
 
     private void addBook(Book book) {
         bookDao.insertAll(book);
-        bookList.add(book);
+        bookList.clear();
+        bookList.addAll(bookDao.getAll());
         // Bad
         bookAdapter.notifyDataSetChanged();
     }
 
     private void deleteBook(Book book) {
         bookDao.delete(book);
-        bookList.remove(book);
+        bookList.clear();
+        bookList.addAll(bookDao.getAll());
         // Bad bad bad
         bookAdapter.notifyDataSetChanged();
     }
