@@ -20,6 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeFragment extends Fragment {
@@ -38,8 +39,7 @@ public class HomeFragment extends Fragment {
     }
 
     public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        return fragment;
+        return new HomeFragment();
     }
 
     @Override
@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Get Activity BookDao
-        bookDao = ((MainActivity) getActivity()).getBookDao();
+        bookDao = ((MainActivity) requireActivity()).getBookDao();
         // Populate book list from BookDao
         bookList = bookDao.getAll();
 
@@ -83,16 +83,7 @@ public class HomeFragment extends Fragment {
 
         // Setup BookAdapter with RecyclerView
         // Navigate to BookFragment with book data
-        bookAdapter = new BookAdapter(bookList, (book, position) -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("bookTitle", book.getTitle());
-            bundle.putString("bookAuthor", book.getAuthor());
-
-            // Navigate to BookFragment with book data
-            navController.navigate(R.id.navigation_book, bundle);
-        }, (book, position) -> {
-            return onBookLongClick(book, position);
-        });
+        bookAdapter = new BookAdapter(bookList, this::onBookClick, this::onBookLongClick);
 
         // Setup RecyclerView with BookAdapter 
         recyclerView.setAdapter(bookAdapter);
@@ -100,24 +91,28 @@ public class HomeFragment extends Fragment {
         // Set FloatingActionButton on click listener
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(v -> {
-            // Add new book to database
+            // Create new book
             Book book = new Book();
             book.setTitle("New Book");
             book.setAuthor("Book Author");
-            bookDao.insertAll(book);
 
-            // Update data set
-            bookList.add(book);
-            // Notify BookAdapter (this is bad but oh well no time)
-            bookAdapter.notifyDataSetChanged();
+            // Add book and update view
+            addBook(book);
+
+            // Update noBooksTextView visibility
             updateNoBooksTextViewVisibility();
         });
 
         return view;
     }
 
-    private void updateNoBooksTextViewVisibility() {
-        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+    private void onBookClick(Book book, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("bookTitle", book.getTitle());
+        bundle.putString("bookAuthor", book.getAuthor());
+
+        // Navigate to BookFragment with book data
+        navController.navigate(R.id.navigation_book, bundle);
     }
 
     private boolean onBookLongClick(Book book, int position) {
@@ -127,10 +122,7 @@ public class HomeFragment extends Fragment {
 
         // Set AlertDialog positive button
         alert.setPositiveButton("Delete", (dialogInterface, i) -> {
-            bookDao.delete(book);
-            bookList.remove(book);
-            // Bad bad bad
-            bookAdapter.notifyDataSetChanged();
+            deleteBook(book);
             updateNoBooksTextViewVisibility();
         });
 
@@ -143,5 +135,23 @@ public class HomeFragment extends Fragment {
         alert.show();
 
         return false;
+    }
+
+    private void updateNoBooksTextViewVisibility() {
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void addBook(Book book) {
+        bookDao.insertAll(book);
+        bookList.add(book);
+        // Bad
+        bookAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteBook(Book book) {
+        bookDao.delete(book);
+        bookList.remove(book);
+        // Bad bad bad
+        bookAdapter.notifyDataSetChanged();
     }
 }
