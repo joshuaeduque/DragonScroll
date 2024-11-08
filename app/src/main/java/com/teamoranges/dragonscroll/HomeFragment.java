@@ -21,6 +21,7 @@ import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeFragment extends Fragment {
@@ -93,7 +94,7 @@ public class HomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(v -> {
             // Create new book
             Book book = new Book();
-            book.setTitle("New Book");
+            book.setTitle(randomTitle());
             book.setAuthor("Book Author");
 
             // Add book and update view
@@ -153,5 +154,18 @@ public class HomeFragment extends Fragment {
         bookList.remove(book);
         // Bad bad bad
         bookAdapter.notifyDataSetChanged();
+    }
+
+    private String randomTitle() {
+        String[] adjectives = {"Lost", "Hidden", "Secret", "Dark", "Silent", "Ancient", "Haunted"};
+        String[] nouns = {"Kingdom", "Garden", "Dreams", "Echoes", "Stars", "Journey", "Legacy"};
+
+        Random random = new Random();
+
+        return String.format(
+                "%s %s",
+                adjectives[random.nextInt(adjectives.length)],
+                nouns[random.nextInt(nouns.length)]
+        );
     }
 }
