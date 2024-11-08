@@ -20,9 +20,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class HomeFragment extends Fragment {
 
@@ -94,7 +92,7 @@ public class HomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(v -> {
             // Create new book
             Book book = new Book();
-            book.setTitle(randomTitle());
+            book.setTitle(getRandomTitle());
             book.setAuthor("Book Author");
 
             // Add book and update view
@@ -109,8 +107,10 @@ public class HomeFragment extends Fragment {
 
     private void onBookClick(Book book, int position) {
         Bundle bundle = new Bundle();
-        bundle.putString("bookTitle", book.getTitle());
-        bundle.putString("bookAuthor", book.getAuthor());
+        // bundle.putString("bookTitle", book.getTitle());
+        // bundle.putString("bookAuthor", book.getAuthor());
+
+        bundle.putInt("bookId", book.getId());
 
         // Navigate to BookFragment with book data
         navController.navigate(R.id.navigation_book, bundle);
@@ -158,7 +158,7 @@ public class HomeFragment extends Fragment {
         bookAdapter.notifyDataSetChanged();
     }
 
-    private String randomTitle() {
+    private String getRandomTitle() {
         String[] adjectives = {"Lost", "Hidden", "Secret", "Dark", "Silent", "Ancient", "Haunted"};
         String[] nouns = {"Kingdom", "Garden", "Dreams", "Echoes", "Stars", "Journey", "Legacy"};
 
