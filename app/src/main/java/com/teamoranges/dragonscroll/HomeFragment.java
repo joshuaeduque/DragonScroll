@@ -94,6 +94,7 @@ public class HomeFragment extends Fragment {
             Book book = new Book();
             book.setTitle(getRandomTitle());
             book.setAuthor("Book Author");
+            book.setRating(1);
 
             // Add book and update view
             addBook(book);

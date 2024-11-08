@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">DragonScroll</string>
 
+    <string name="edit">Edit</string>
+
     <string name="no_books">No books added!</string>
     
     <string name="books_read_default">Books Read: 0</string>

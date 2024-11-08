@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         // something proper. Too bad!
         database = Room.databaseBuilder(
                 getApplicationContext(), AppDatabase.class, "books-db"
-        ).allowMainThreadQueries().build();
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().build();
         bookDao = database.bookDao();
     }
 
