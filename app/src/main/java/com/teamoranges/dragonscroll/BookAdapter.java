@@ -4,24 +4,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.teamoranges.dragonscroll.models.BookModel;
+import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
 
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
-    private final List<BookModel> bookList;
-    private final OnBookClickListener listener;
+    private static final String TAG = "BookAdapter";
 
-    public BookAdapter(List<BookModel> bookList, OnBookClickListener listener) {
+    private final List<Book> bookList;
+    private final OnBookClickListener onClickListener;
+    private final OnBookLongClickListener onLongClickListener;
+
+    public BookAdapter(List<Book> bookList, OnBookClickListener onClickListener, OnBookLongClickListener onLongClickListener) {
         this.bookList = bookList;
-        this.listener = listener;
+        this.onClickListener = onClickListener;
+        this.onLongClickListener = onLongClickListener;
     }
 
     @NonNull
@@ -36,12 +39,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        BookModel book = bookList.get(position);
+        Book book = bookList.get(position);
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
 
-        holder.itemView.setOnClickListener((view) -> {
-            listener.onBookClick(book, position);
+        holder.itemView.setOnClickListener(view -> {
+            onClickListener.onBookClick(book, position);
+        });
+
+        holder.itemView.setOnLongClickListener(view -> {
+            return onLongClickListener.onBookLongClick(book, position);
         });
     }
 

@@ -1,7 +1,7 @@
 package com.teamoranges.dragonscroll;
 
-import com.teamoranges.dragonscroll.models.BookModel;
+import com.teamoranges.dragonscroll.models.Book;
 
 public interface OnBookClickListener {
-    void onBookClick(BookModel book, int position);
+    void onBookClick(Book book, int position);
 }

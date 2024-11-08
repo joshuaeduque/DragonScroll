@@ -1,22 +1,27 @@
 package com.teamoranges.dragonscroll;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.Objects;
-
 public class MainActivity extends AppCompatActivity {
     private final String TAG = "MainActivity";
+
+    private AppDatabase database;
+    private BookDao bookDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +45,38 @@ public class MainActivity extends AppCompatActivity {
         if (navHostFragment == null)
             return;
 
+        // Create an AppBarConfiguration
+        AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
+        ).build();
+
+        // Set activity toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         // Get the NavController from the NavHostFragment
         NavController navController = navHostFragment.getNavController();
 
+        // Setup NavigationUI with our AppBarConfiguration
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
         // Setup NavigationUI with the BottomNavigationView and NavController
         NavigationUI.setupWithNavController(bottomNavigationView, navController);
+
+        // Create books database
+        // Notice how we're allowed queries on the main thread
+        // That's normally a big no-no but there's no time to scaffold
+        // something proper. Too bad!
+        database = Room.databaseBuilder(
+                getApplicationContext(), AppDatabase.class, "books-db"
+        ).allowMainThreadQueries().build();
+        bookDao = database.bookDao();
+    }
+
+    public AppDatabase getDatabase() {
+        return database;
+    }
+
+    public BookDao getBookDao() {
+        return bookDao;
     }
 }
