@@ -54,6 +54,9 @@ public class BookFragment extends Fragment {
         bookDao = ((MainActivity)requireActivity()).getBookDao();
         book = bookDao.getBook(bookIdParam);
 
+        // Hacky for now
+        ((TextView)(view.findViewById(R.id.bookTitle))).setText(book.getTitle());
+
         return view;
     }
 }
