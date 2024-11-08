@@ -1,5 +1,6 @@
 package com.teamoranges.dragonscroll;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
@@ -13,69 +14,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.TextView;
 
-import com.teamoranges.dragonscroll.models.BookModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.teamoranges.dragonscroll.models.Book;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment {
 
-    private final String TAG = "HomeFragment";
+    private static final String TAG = "HomeFragment";
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private NavController navController;
+    private Context context;
+    private BookDao bookDao;
+    private List<Book> bookList;
+    private BookAdapter bookAdapter;
+    private TextView noBooksTextView;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MainFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+        return new HomeFragment();
     }
-
-    private RecyclerView recyclerView;
-    private BookAdapter bookAdapter;
-    private List<BookModel> bookList;
-    private NavController navController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // Try getting NavController from NavHostFragment
         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
@@ -97,38 +66,92 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         // Get Context
-        Context context = requireContext();
+        context = requireContext();
 
         // Setup RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Create book list with fake data
-        bookList = new ArrayList<BookModel>();
-        bookList.add(new BookModel("Book Title", "Book Author"));
-        bookList.add(new BookModel("1984", "George Orwell"));
-        bookList.add(new BookModel("Charlotte's Web", "E. B. White"));
-        bookList.add(new BookModel("World War Z", "Max Brooks"));
-        bookList.add(new BookModel("Animal Farm", "George Orwell"));
-        bookList.add(new BookModel("Dracula", "Bram Stoker"));
-        bookList.add(new BookModel("Iliad", "Homer"));
-        bookList.add(new BookModel("Adventures of Huckleberry Finn", "Mark Twain"));
-        bookList.add(new BookModel("Lord of the Flies", "William Golding"));
-        bookList.add(new BookModel("The Cat in the Hat", "Dr. Seuss"));
+        // Get Activity BookDao
+        bookDao = ((MainActivity) requireActivity()).getBookDao();
+        // Populate book list from BookDao
+        bookList = bookDao.getAll();
+
+        // If no books in list, show empty text
+        noBooksTextView = view.findViewById(R.id.noBooksTextView);
+        updateNoBooksTextViewVisibility();
 
         // Setup BookAdapter with RecyclerView
-        bookAdapter = new BookAdapter(bookList, (book, position) -> {
-            Bundle bundle = new Bundle();
-            bundle.putString("bookTitle", book.getTitle());
-            bundle.putString("bookAuthor", book.getAuthor());
-
-            // Navigate to BookFragment with book data
-            navController.navigate(R.id.navigation_book, bundle);
-        });
+        // Navigate to BookFragment with book data
+        bookAdapter = new BookAdapter(bookList, this::onBookClick, this::onBookLongClick);
 
         // Setup RecyclerView with BookAdapter 
         recyclerView.setAdapter(bookAdapter);
 
+        // Set FloatingActionButton on click listener
+        FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
+        floatingActionButton.setOnClickListener(v -> {
+            // Create new book
+            Book book = new Book();
+            book.setTitle("New Book");
+            book.setAuthor("Book Author");
+
+            // Add book and update view
+            addBook(book);
+
+            // Update noBooksTextView visibility
+            updateNoBooksTextViewVisibility();
+        });
+
         return view;
+    }
+
+    private void onBookClick(Book book, int position) {
+        Bundle bundle = new Bundle();
+        bundle.putString("bookTitle", book.getTitle());
+        bundle.putString("bookAuthor", book.getAuthor());
+
+        // Navigate to BookFragment with book data
+        navController.navigate(R.id.navigation_book, bundle);
+    }
+
+    private boolean onBookLongClick(Book book, int position) {
+        // Create delete AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                .setMessage(String.format("Delete %s?", book.getTitle()));
+
+        // Set AlertDialog positive button
+        alert.setPositiveButton("Delete", (dialogInterface, i) -> {
+            deleteBook(book);
+            updateNoBooksTextViewVisibility();
+        });
+
+        // Set AlertDialog negative button
+        alert.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            // Empty lambda lol
+        });
+
+        // Show AlertDialog
+        alert.show();
+
+        return false;
+    }
+
+    private void updateNoBooksTextViewVisibility() {
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void addBook(Book book) {
+        bookDao.insertAll(book);
+        bookList.add(book);
+        // Bad
+        bookAdapter.notifyDataSetChanged();
+    }
+
+    private void deleteBook(Book book) {
+        bookDao.delete(book);
+        bookList.remove(book);
+        // Bad bad bad
+        bookAdapter.notifyDataSetChanged();
     }
 }
