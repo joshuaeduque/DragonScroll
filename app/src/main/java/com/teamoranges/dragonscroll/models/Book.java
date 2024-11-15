@@ -16,6 +16,9 @@ public class Book {
     @ColumnInfo(name = "author")
     private String author;
 
+    @ColumnInfo(name = "rating")
+    private int rating;
+
     public int getId() {
         return id;
     }
@@ -38,5 +41,13 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 }
