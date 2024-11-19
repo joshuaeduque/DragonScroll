@@ -63,6 +63,14 @@ public class BookFragment extends Fragment {
         authorTextView.setText(book.getAuthor());
         ratingTextView.setText(String.format("Rating: %d/5", book.getRating()));
 
+        // Set the Edit TextView on click listener
+        TextView editTextView = view.findViewById(R.id.editTextView);
+        editTextView.setOnClickListener(this::onEditTextViewClicked);
+
         return view;
+    }
+
+    private void onEditTextViewClicked(View view) {
+
     }
 }
