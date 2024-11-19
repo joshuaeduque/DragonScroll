@@ -31,6 +31,7 @@ public class BookFragment extends Fragment {
     private BookDao bookDao;
     private Book book;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private ImageView coverImageView;
 
     public BookFragment() {
         // Required empty public constructor
@@ -61,6 +62,10 @@ public class BookFragment extends Fragment {
                     // photo picker.
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
+                        if(coverImageView == null) {
+                            return;
+                        }
+                        coverImageView.setImageURI(uri);
                     } else {
                         Log.d("PhotoPicker", "No media selected");
                     }
@@ -80,7 +85,7 @@ public class BookFragment extends Fragment {
         book = bookDao.getBook(bookIdParam);
 
         // Setup cove ImageView
-        ImageView coverImageView = view.findViewById(R.id.coverImageView);
+        coverImageView = view.findViewById(R.id.coverImageView);
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Setup edit TextView
