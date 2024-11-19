@@ -70,12 +70,47 @@ public class BookFragment extends Fragment {
         // Setup author TextView
         TextView authorTextView = view.findViewById(R.id.authorTextView);
         authorTextView.setText(book.getAuthor());
+        authorTextView.setOnClickListener(this::onAuthorTextViewClicked);
 
         // Setup rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
         ratingTextView.setText(String.format("Rating: %d/5", book.getRating()));
 
         return view;
+    }
+
+    private void onAuthorTextViewClicked(View view) {
+        // Get Context
+        Context context = this.getContext();
+
+        //  Create EditText
+        EditText editText = new EditText(context);
+        editText.setHint(book.getAuthor());
+
+        // Create AlertDialog
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context)
+                .setMessage("Enter author")
+                .setView(editText);
+
+        // Set positive button
+        alertDialog.setPositiveButton("Save", (dialogInterface, i) -> {
+            // Get EditText text
+            String text = editText.getText().toString();
+            // Return if text is empty
+            if (text.trim().isEmpty()) {
+                return;
+            }
+            // Update book author
+            updateBookAuthor(view, text);
+        });
+
+        // Set negative button
+        alertDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            // Empty lambda to make negative button show
+        });
+
+        // Show AlertDialog
+        alertDialog.show();
     }
 
     private void onTitleTextViewClicked(View view) {
@@ -96,8 +131,8 @@ public class BookFragment extends Fragment {
             // Get EditText text
             String text = editText.getText().toString();
             // Return if text is empty
-            if(text.trim().isEmpty()) {
-               return;
+            if (text.trim().isEmpty()) {
+                return;
             }
             // Update book title
             updateBookTitle(view, text);
@@ -112,11 +147,19 @@ public class BookFragment extends Fragment {
         alertDialog.show();
     }
 
+    private void updateBookAuthor(View view, String author) {
+        // Update author in database
+        bookDao.setAuthor(bookIdParam, author);
+        // Update author in view
+        TextView authorTextView = (TextView) view;
+        authorTextView.setText(author);
+    }
+
     private void updateBookTitle(View view, String title) {
         // Update title in database
         bookDao.setTitle(bookIdParam, title);
         // Update title in view
-        TextView titleTextView = (TextView)view;
+        TextView titleTextView = (TextView) view;
         titleTextView.setText(title);
     }
 
