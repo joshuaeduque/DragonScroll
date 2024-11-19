@@ -17,6 +17,9 @@ public interface BookDao {
     @Query("SELECT * FROM book WHERE id = :id LIMIT 1")
     Book getBook(int id);
 
+    @Query("UPDATE book SET title = :title WHERE id = :id")
+    void setTitle(int id, String title);
+
     @Insert
     void insertAll(Book... books);
 

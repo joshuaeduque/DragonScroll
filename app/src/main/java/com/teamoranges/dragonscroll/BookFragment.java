@@ -114,6 +114,7 @@ public class BookFragment extends Fragment {
 
     private void updateBookTitle(View view, String title) {
         // Update title in database
+        bookDao.setTitle(bookIdParam, title);
         // Update title in view
         TextView titleTextView = (TextView)view;
         titleTextView.setText(title);
