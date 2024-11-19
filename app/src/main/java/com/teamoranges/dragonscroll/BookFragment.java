@@ -1,7 +1,10 @@
 package com.teamoranges.dragonscroll;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -62,10 +65,22 @@ public class BookFragment extends Fragment {
                     // photo picker.
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
-                        if(coverImageView == null) {
+                        if (coverImageView == null) {
                             return;
                         }
-                        coverImageView.setImageURI(uri);
+
+                        try {
+                            // Do some nonsense with permissions
+                            Context context = requireContext();
+                            context.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        }
+                        catch(Exception exception) {
+                            Log.d("PhotoPicker", "Permissions failed ig");
+                            return;
+                        }
+
+                        // Update book cover
+                        updateBookCover(coverImageView, uri);
                     } else {
                         Log.d("PhotoPicker", "No media selected");
                     }
@@ -86,6 +101,9 @@ public class BookFragment extends Fragment {
 
         // Setup cove ImageView
         coverImageView = view.findViewById(R.id.coverImageView);
+        if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
+            coverImageView.setImageURI(Uri.parse(book.getCoverUri()));
+        }
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Setup edit TextView
@@ -256,6 +274,18 @@ public class BookFragment extends Fragment {
         titleTextView.setText(title);
         // Update local book title
         book.setTitle(title);
+    }
+
+    private void updateBookCover(View view, Uri uri) {
+        String uriString = uri.toString();
+
+        // Update uri in database
+        bookDao.setCoverUri(bookIdParam, uriString);
+        // Update uri in view
+        ImageView coverImageView = (ImageView) view;
+        coverImageView.setImageURI(uri);
+        // Update local book uri
+        book.setCoverUri(uriString);
     }
 
     private void onEditTextViewClicked(View view) {
