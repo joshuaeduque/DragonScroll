@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,9 +76,64 @@ public class BookFragment extends Fragment {
         // Setup rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
         ratingTextView.setText(String.format("Rating: %d/5", book.getRating()));
+        ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
         return view;
     }
+
+    private void onRatingTextViewClicked(View view) {
+        // Get Context
+        Context context = this.getContext();
+
+        //  Create EditText
+        EditText editText = new EditText(context);
+        editText.setHint(String.valueOf(book.getRating()));
+        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        // Create AlertDialog
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context)
+                .setMessage("Enter rating")
+                .setView(editText);
+
+        // Set positive button
+        alertDialog.setPositiveButton("Save", (dialogInterface, i) -> {
+            // Get EditText text
+            String text = editText.getText().toString();
+            // Return if text is empty
+            if (text.trim().isEmpty()) {
+                return;
+            }
+
+            // Get the text as an int
+            int rating = tryParseInt(text);
+            // Check if the int value is 1 - 5 inclusive
+            if (rating < 1 || rating > 5) {
+                return;
+            }
+
+            // Update book author
+            updateBookRating(view, rating);
+        });
+
+        // Set negative button
+        alertDialog.setNegativeButton("Cancel", (dialogInterface, i) -> {
+            // Empty lambda to make negative button show
+        });
+
+        // Show AlertDialog
+        alertDialog.show();
+    }
+
+    // This is so hacky but it works for now
+    private int tryParseInt(String number) {
+        try {
+            return Integer.parseInt(number);
+        } catch (Exception exception) {
+            return -1;
+        }
+    }
+
+
 
     private void onAuthorTextViewClicked(View view) {
         // Get Context
@@ -147,12 +203,24 @@ public class BookFragment extends Fragment {
         alertDialog.show();
     }
 
+    private void updateBookRating(View view, int rating) {
+        // Update rating in database
+        bookDao.setRating(bookIdParam, rating);
+        // Update rating in view
+        TextView ratingTextView = (TextView) view;
+        ratingTextView.setText(String.format("Rating: %d/5", rating));
+        // Update local book variable
+        book.setRating(rating);
+    }
+
     private void updateBookAuthor(View view, String author) {
         // Update author in database
         bookDao.setAuthor(bookIdParam, author);
         // Update author in view
         TextView authorTextView = (TextView) view;
         authorTextView.setText(author);
+        // Update local book variable
+        book.setAuthor(author);
     }
 
     private void updateBookTitle(View view, String title) {
@@ -161,6 +229,8 @@ public class BookFragment extends Fragment {
         // Update title in view
         TextView titleTextView = (TextView) view;
         titleTextView.setText(title);
+        // Update local book title
+        book.setTitle(title);
     }
 
     private void onEditTextViewClicked(View view) {

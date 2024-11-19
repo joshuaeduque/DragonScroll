@@ -23,6 +23,9 @@ public interface BookDao {
     @Query("UPDATE book SET author = :author WHERE id = :id")
     void setAuthor(int id, String author);
 
+    @Query("UPDATE book SET rating = :rating WHERE id = :id")
+    void setRating(int id, int rating);
+
     @Insert
     void insertAll(Book... books);
 
