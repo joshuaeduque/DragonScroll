@@ -37,5 +37,14 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
             return true;
         });
+
+        Preference nukeDbButton = findPreference("nuke_db_preference");
+        if (nukeDbButton == null)
+            return;
+        nukeDbButton.setOnPreferenceClickListener(preference -> {
+            BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
+            bookDao.nukeTable();
+            return true;
+        });
     }
 }

@@ -142,18 +142,26 @@ public class HomeFragment extends Fragment {
     }
 
     private void addBook(Book book) {
+        // Insert book into database
         bookDao.insertAll(book);
+
+        // Update the list
         bookList.clear();
         bookList.addAll(bookDao.getAll());
-        // Bad
+
+        // Notify the adapter (bad)
         bookAdapter.notifyDataSetChanged();
     }
 
     private void deleteBook(Book book) {
+        // Delete book from database
         bookDao.delete(book);
+
+        // Update the list
         bookList.clear();
         bookList.addAll(bookDao.getAll());
-        // Bad bad bad
+
+        // Notify the adapter (baddd)
         bookAdapter.notifyDataSetChanged();
     }
 
