@@ -108,8 +108,6 @@ public class HomeFragment extends Fragment {
 
     private void onBookClick(Book book, int position) {
         Bundle bundle = new Bundle();
-        // bundle.putString("bookTitle", book.getTitle());
-        // bundle.putString("bookAuthor", book.getAuthor());
 
         bundle.putInt("bookId", book.getId());
 

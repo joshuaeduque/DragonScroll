@@ -1,9 +1,10 @@
 package com.teamoranges.dragonscroll;
 
-import android.util.Log;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -43,6 +44,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         holder.title.setText(book.getTitle());
         holder.author.setText(book.getAuthor());
 
+        if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
+            holder.cover.setImageURI(Uri.parse(book.getCoverUri()));
+        }
+
         holder.itemView.setOnClickListener(view -> {
             onClickListener.onBookClick(book, position);
         });
@@ -59,12 +64,14 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
     public static class BookViewHolder extends RecyclerView.ViewHolder {
         private final TextView title, author;
+        private final ImageView cover;
 
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
 
             title = itemView.findViewById(R.id.titleTextView);
             author = itemView.findViewById(R.id.authorTextView);
+            cover = itemView.findViewById(R.id.coverImageView);
         }
     }
 }

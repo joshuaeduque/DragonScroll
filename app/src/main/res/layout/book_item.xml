@@ -6,12 +6,17 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/profileImageView"
+        android:id="@+id/coverImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
+        android:minWidth="128dp"
+        android:minHeight="128dp"
+        android:maxWidth="128dp"
+        android:maxHeight="128dp"
+        android:adjustViewBounds="true"
         android:src="@android:drawable/sym_def_app_icon"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +30,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Book Title"
-        app:layout_constraintStart_toEndOf="@+id/profileImageView"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -35,7 +40,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Author"
-        app:layout_constraintStart_toEndOf="@+id/profileImageView"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
