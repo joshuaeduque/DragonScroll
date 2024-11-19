@@ -7,7 +7,7 @@
     tools:context=".BookFragment" >
 
     <ImageView
-        android:id="@+id/bookImage"
+        android:id="@+id/coverImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="128dp"
@@ -25,7 +25,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="title"
-        app:layout_constraintStart_toEndOf="@+id/bookImage"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -35,7 +35,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="author"
-        app:layout_constraintStart_toEndOf="@+id/bookImage"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="rating"
-        app:layout_constraintStart_toEndOf="@+id/bookImage"
+        app:layout_constraintStart_toEndOf="@+id/coverImageView"
         app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
 
     <TextView
@@ -56,7 +56,7 @@
         android:layout_marginTop="16dp"
         android:text="start"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/bookImage" />
+        app:layout_constraintTop_toBottomOf="@+id/coverImageView" />
 
     <TextView
         android:id="@+id/end"

@@ -4,16 +4,23 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.teamoranges.dragonscroll.models.Book;
+
+import java.util.Locale;
 
 public class BookFragment extends Fragment {
 
@@ -23,6 +30,7 @@ public class BookFragment extends Fragment {
 
     private BookDao bookDao;
     private Book book;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     public BookFragment() {
         // Required empty public constructor
@@ -45,6 +53,18 @@ public class BookFragment extends Fragment {
         if (getArguments() != null) {
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
+
+        // Registers a photo picker activity launcher in single-select mode.
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        Log.d("PhotoPicker", "Selected URI: " + uri);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
+                });
     }
 
     @Override
@@ -58,6 +78,10 @@ public class BookFragment extends Fragment {
 
         // Get Book by ID from database
         book = bookDao.getBook(bookIdParam);
+
+        // Setup cove ImageView
+        ImageView coverImageView = view.findViewById(R.id.coverImageView);
+        coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Setup edit TextView
         TextView editTextView = view.findViewById(R.id.editTextView);
@@ -75,10 +99,17 @@ public class BookFragment extends Fragment {
 
         // Setup rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
-        ratingTextView.setText(String.format("Rating: %d/5", book.getRating()));
+        ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", book.getRating()));
         ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
         return view;
+    }
+
+    private void onCoverImageViewClicked(View view) {
+        // Launch the photo picker and let the user choose only images.
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 
     private void onRatingTextViewClicked(View view) {
@@ -123,17 +154,6 @@ public class BookFragment extends Fragment {
         // Show AlertDialog
         alertDialog.show();
     }
-
-    // This is so hacky but it works for now
-    private int tryParseInt(String number) {
-        try {
-            return Integer.parseInt(number);
-        } catch (Exception exception) {
-            return -1;
-        }
-    }
-
-
 
     private void onAuthorTextViewClicked(View view) {
         // Get Context
@@ -208,7 +228,7 @@ public class BookFragment extends Fragment {
         bookDao.setRating(bookIdParam, rating);
         // Update rating in view
         TextView ratingTextView = (TextView) view;
-        ratingTextView.setText(String.format("Rating: %d/5", rating));
+        ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", rating));
         // Update local book variable
         book.setRating(rating);
     }
@@ -235,5 +255,14 @@ public class BookFragment extends Fragment {
 
     private void onEditTextViewClicked(View view) {
         // TODO
+    }
+
+    // This is so hacky but it works for now
+    private int tryParseInt(String number) {
+        try {
+            return Integer.parseInt(number);
+        } catch (Exception exception) {
+            return -1;
+        }
     }
 }
