@@ -106,10 +106,6 @@ public class BookFragment extends Fragment {
         }
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
-        // Setup edit TextView
-        TextView editTextView = view.findViewById(R.id.editTextView);
-        editTextView.setOnClickListener(this::onEditTextViewClicked);
-
         // Setup title TextView
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         titleTextView.setText(book.getTitle());

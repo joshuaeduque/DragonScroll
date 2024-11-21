@@ -4,6 +4,9 @@
     <string name="edit">Edit</string>
 
     <string name="no_books">No books added!</string>
+
+    <string name="summary">Summary</string>
+    <string name="notes">Notes</string>
     
     <string name="books_read_default">Books Read: 0</string>
     <string name="books_reading_default">Books Reading: 0</string>
