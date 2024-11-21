@@ -14,6 +14,9 @@ public interface BookDao {
     @Query("SELECT * FROM book")
     List<Book> getAll();
 
+    @Query("SELECT COUNT(*) FROM book")
+    int getCount();
+
     @Query("SELECT * FROM book WHERE id = :id LIMIT 1")
     Book getBook(int id);
 

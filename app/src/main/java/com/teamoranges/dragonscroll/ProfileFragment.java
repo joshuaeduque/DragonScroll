@@ -7,13 +7,13 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,6 +30,10 @@ public class ProfileFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private BookDao bookDao;
+
+    private int booksRead;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -53,7 +57,6 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
-    private Context context;
     private String profileName;
     private SharedPreferences sharedPrefs;
 
@@ -65,11 +68,13 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        // Get Context
-        context = requireContext();
+        // Get book DAO
+        bookDao = ((MainActivity)requireActivity()).getBookDao();
+        // Get books read
+        booksRead = bookDao.getCount();
 
         // Get SharedPreferences
-        sharedPrefs = context.getSharedPreferences(
+        sharedPrefs = requireContext().getSharedPreferences(
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE
         );
@@ -88,55 +93,62 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         // Get profile name TextView
-        TextView profileNameTextView = view.findViewById(R.id.profileNameTextView);
+        TextView profileNameTextView = view.findViewById(R.id.nameTextView);
 
         // Set profile name
         profileNameTextView.setText(this.profileName);
-        profileNameTextView.setClickable(true);
 
         // Set profile name TextView on click listener
-        profileNameTextView.setOnClickListener(profileNameView -> {
-            // Create EditText for user input
-            final EditText editText = new EditText(context);
-            editText.setHint("Profile name");
+        profileNameTextView.setOnClickListener(this::onNameTextViewClicked);
 
-            // Create AlertDialog
-            AlertDialog.Builder alert = new AlertDialog.Builder(context)
-                    .setMessage("Enter a new profile name")
-                    .setView(editText);
-
-            // Set AlertDialog positive button on click listener
-            alert.setPositiveButton("Save", (dialog, button) -> {
-                // Get EditText text
-                String editTextValue = String.valueOf(editText.getText());
-
-                // Validate EditText text.
-                // If it's empty, just return without doing anything.
-                if (editTextValue.trim().isEmpty())
-                    return;
-
-                // Set text of TextView with user profile name
-                profileNameTextView.setText(editTextValue);
-
-                // Save new profile name to SharedPreferences
-                SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString(
-                        getString(R.string.profile_name_key),
-                        editTextValue);
-                editor.apply();
-            });
-
-            // Give AlertDialog negative button and empty on click listener
-            alert.setNegativeButton("Cancel", (dialog, button) -> {
-                // The negative button needs an empty on click listener
-                // otherwise it won't show at all.
-                // There's probably a better way to do this lmao.
-            });
-
-            // Show the AlertDialog 
-            alert.show();
-        });
+        // Set books read TextView
+        TextView booksReadTextView = view.findViewById(R.id.booksReadTextView);
+        booksReadTextView.setText(String.format(Locale.getDefault(), "Books Read: %d", booksRead));
 
         return view;
+    }
+
+    private void onNameTextViewClicked(View view) {
+        Context context = requireContext();
+
+        // Create EditText for user input
+        EditText editText = new EditText(context);
+        editText.setHint("Profile name");
+
+        // Create AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                .setMessage("Enter a new profile name")
+                .setView(editText);
+
+        // Set AlertDialog positive button on click listener
+        alert.setPositiveButton("Save", (dialog, button) -> {
+            // Get EditText text
+            String editTextValue = String.valueOf(editText.getText());
+
+            // Validate EditText text.
+            // If it's empty, just return without doing anything.
+            if (editTextValue.trim().isEmpty())
+                return;
+
+            // Set text of TextView with user profile name
+            ((TextView) view).setText(editTextValue);
+
+            // Save new profile name to SharedPreferences
+            SharedPreferences.Editor editor = sharedPrefs.edit();
+            editor.putString(
+                    getString(R.string.profile_name_key),
+                    editTextValue);
+            editor.apply();
+        });
+
+        // Give AlertDialog negative button and empty on click listener
+        alert.setNegativeButton("Cancel", (dialog, button) -> {
+            // The negative button needs an empty on click listener
+            // otherwise it won't show at all.
+            // There's probably a better way to do this lmao.
+        });
+
+        // Show the AlertDialog
+        alert.show();
     }
 }
