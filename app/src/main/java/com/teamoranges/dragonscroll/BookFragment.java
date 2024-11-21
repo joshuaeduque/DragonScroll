@@ -59,6 +59,12 @@ public class BookFragment extends Fragment {
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
 
+        // Get BookDAO from MainActivity
+        bookDao = ((MainActivity) requireActivity()).getBookDao();
+
+        // Get Book by ID from database
+        book = bookDao.getBook(bookIdParam);
+
         // Registers a photo picker activity launcher in single-select mode.
         pickMedia =
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
@@ -93,12 +99,6 @@ public class BookFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
-
-        // Get BookDAO from MainActivity
-        bookDao = ((MainActivity) requireActivity()).getBookDao();
-
-        // Get Book by ID from database
-        book = bookDao.getBook(bookIdParam);
 
         // Setup cove ImageView
         coverImageView = view.findViewById(R.id.coverImageView);
