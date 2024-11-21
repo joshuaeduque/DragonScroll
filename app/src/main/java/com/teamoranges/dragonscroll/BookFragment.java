@@ -103,7 +103,7 @@ public class BookFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_book, container, false);
 
         // Setup cover ImageView
-        coverImageView = view.findViewById(R.id.coverImageView);
+        coverImageView = view.findViewById(R.id.profileImageView);
         if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
             coverImageView.setImageURI(Uri.parse(book.getCoverUri()));
         }
