@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -121,7 +122,23 @@ public class BookFragment extends Fragment {
         ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", book.getRating()));
         ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
+        // Setup save summary Button
+        Button saveSummaryButton = view.findViewById(R.id.saveSummaryButton);
+        saveSummaryButton.setOnClickListener(this::onSaveSummaryButtonClicked);
+
+        // Setup save notes Button
+        Button saveNotesButton = view.findViewById(R.id.saveNotesButton);
+        saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
+
         return view;
+    }
+
+    private void onSaveSummaryButtonClicked(View view) {
+        // todo
+    }
+
+    private void onSaveNotesButtonClicked(View view) {
+        // todo
     }
 
     private void onCoverImageViewClicked(View view) {
@@ -282,10 +299,6 @@ public class BookFragment extends Fragment {
         coverImageView.setImageURI(uri);
         // Update local book uri
         book.setCoverUri(uriString);
-    }
-
-    private void onEditTextViewClicked(View view) {
-        // TODO
     }
 
     // This is so hacky but it works for now

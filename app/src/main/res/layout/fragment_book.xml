@@ -138,10 +138,10 @@
             android:layout_marginStart="16dp"
             android:text="@string/notes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button" />
+            app:layout_constraintTop_toBottomOf="@+id/saveSummaryButton" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/saveSummaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save"
@@ -151,7 +151,7 @@
             app:layout_constraintTop_toBottomOf="@+id/summaryText" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/saveNotesButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/save"
