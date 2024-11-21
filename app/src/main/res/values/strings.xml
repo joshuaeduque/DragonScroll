@@ -8,6 +8,8 @@
     <string name="save">Save</string>
     <string name="books_read">Books Read: 0</string>
     <string name="favorite_book">Favorite Book: none</string>
+    <string name="start_date">Start Date: none</string>
+    <string name="end_date">End Date: none</string>
     
     <string name="profile_image_description">User profile image</string>
 

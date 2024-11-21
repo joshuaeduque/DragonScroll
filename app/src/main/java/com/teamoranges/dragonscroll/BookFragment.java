@@ -1,6 +1,7 @@
 package com.teamoranges.dragonscroll;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,6 +26,7 @@ import android.widget.Toast;
 
 import com.teamoranges.dragonscroll.models.Book;
 
+import java.util.Calendar;
 import java.util.Locale;
 
 public class BookFragment extends Fragment {
@@ -140,7 +143,28 @@ public class BookFragment extends Fragment {
         Button saveNotesButton = view.findViewById(R.id.saveNotesButton);
         saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
 
+        // todo
+        TextView startTextView = view.findViewById(R.id.startTextView);
+        startTextView.setOnClickListener(this::onStartTextViewClicked);
+
         return view;
+    }
+
+    private void onStartTextViewClicked(View view) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                // year month day
+                updateStartDate(view, i, i1, i2);
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void onSaveSummaryButtonClicked(View view) {
@@ -319,6 +343,15 @@ public class BookFragment extends Fragment {
         coverImageView.setImageURI(uri);
         // Update local book uri
         book.setCoverUri(uriString);
+    }
+
+    private void updateStartDate(View view, int year, int month, int day) {
+        String date = String.format(Locale.getDefault() ,"Start: %d/%d/%d", year, month, day);
+
+        // Update date in database
+        // Update date in view
+        ((TextView)view).setText(date);
+        // Update local book date
     }
 
     // This is so hacky but it works for now
