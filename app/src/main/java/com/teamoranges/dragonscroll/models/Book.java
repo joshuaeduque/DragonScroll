@@ -22,6 +22,12 @@ public class Book {
     @ColumnInfo(name = "cover_uri")
     private String coverUri;
 
+    @ColumnInfo(name = "summary")
+    private String summary;
+
+    @ColumnInfo(name = "notes")
+    private String notes;
+
     public int getId() {
         return id;
     }
@@ -60,5 +66,21 @@ public class Book {
 
     public void setCoverUri(String coverUri) {
         this.coverUri = coverUri;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }
