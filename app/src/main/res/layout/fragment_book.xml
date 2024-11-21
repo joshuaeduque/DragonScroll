@@ -56,7 +56,7 @@
             app:layout_constraintTop_toBottomOf="@+id/authorTextView" />
 
         <TextView
-            android:id="@+id/startTextView"
+            android:id="@+id/startDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -66,14 +66,14 @@
             app:layout_constraintTop_toBottomOf="@+id/profileImageView" />
 
         <TextView
-            android:id="@+id/endTextView"
+            android:id="@+id/endDateTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/end_date"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/startTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/startDateTextView" />
 
         <TextView
             android:id="@+id/summaryTextView"
@@ -83,7 +83,7 @@
             android:layout_marginTop="16dp"
             android:text="@string/summary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/endTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/endDateTextView" />
 
         <EditText
             android:id="@+id/summaryEditText"

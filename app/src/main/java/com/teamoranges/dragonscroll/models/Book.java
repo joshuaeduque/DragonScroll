@@ -28,6 +28,12 @@ public class Book {
     @ColumnInfo(name = "notes")
     private String notes;
 
+    @ColumnInfo(name = "start_date")
+    private String startDate;
+
+    @ColumnInfo(name = "end_date")
+    private String endDate;
+
     public int getId() {
         return id;
     }
@@ -82,5 +88,21 @@ public class Book {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 }

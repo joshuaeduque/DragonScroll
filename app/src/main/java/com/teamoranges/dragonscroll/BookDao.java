@@ -38,6 +38,12 @@ public interface BookDao {
     @Query("UPDATE book SET notes = :notes WHERE id =:id")
     void setNotes(int id, String notes);
 
+    @Query("UPDATE book SET start_date = :startDate WHERE id = :id")
+    void setStartDate(int id, String startDate);
+
+    @Query("UPDATE book SET end_date = :endDate WHERE id = :id")
+    void setEndDate(int id, String endDate);
+
     @Insert
     void insertAll(Book... books);
 

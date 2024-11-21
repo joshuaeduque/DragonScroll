@@ -144,8 +144,10 @@ public class BookFragment extends Fragment {
         saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
 
         // todo
-        TextView startTextView = view.findViewById(R.id.startTextView);
-        startTextView.setOnClickListener(this::onStartTextViewClicked);
+        TextView startDateTextView = view.findViewById(R.id.startDateTextView);
+        String startDateText = "Start Date: " + (book.getStartDate() == null ? "none" : book.getStartDate());
+        startDateTextView.setText(startDateText);
+        startDateTextView.setOnClickListener(this::onStartTextViewClicked);
 
         return view;
     }
@@ -346,12 +348,14 @@ public class BookFragment extends Fragment {
     }
 
     private void updateStartDate(View view, int year, int month, int day) {
-        String date = String.format(Locale.getDefault() ,"Start: %d/%d/%d", year, month, day);
+        String date = String.format(Locale.getDefault() ,"%d/%d/%d", year, month, day);
 
         // Update date in database
+        bookDao.setStartDate(bookIdParam, date);
         // Update date in view
-        ((TextView)view).setText(date);
+        ((TextView)view).setText(String.format(Locale.getDefault(), "Start Date: %s", date));
         // Update local book date
+        book.setStartDate(date);
     }
 
     // This is so hacky but it works for now
