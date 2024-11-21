@@ -96,7 +96,7 @@
             app:layout_constraintTop_toBottomOf="@+id/timeTextView" />
 
         <EditText
-            android:id="@+id/summaryText"
+            android:id="@+id/summaryEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -113,7 +113,7 @@
             app:layout_constraintTop_toBottomOf="@+id/summaryTextView" />
 
         <EditText
-            android:id="@+id/notesText"
+            android:id="@+id/notesEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -148,7 +148,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/summaryText" />
+            app:layout_constraintTop_toBottomOf="@+id/summaryEditText" />
 
         <Button
             android:id="@+id/saveNotesButton"
@@ -158,7 +158,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.95"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notesText" />
+            app:layout_constraintTop_toBottomOf="@+id/notesEditText" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

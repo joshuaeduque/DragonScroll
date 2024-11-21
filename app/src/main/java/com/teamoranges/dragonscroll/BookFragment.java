@@ -1,7 +1,6 @@
 package com.teamoranges.dragonscroll;
 
 import android.app.AlertDialog;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -21,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.teamoranges.dragonscroll.models.Book;
 
@@ -36,6 +36,9 @@ public class BookFragment extends Fragment {
     private Book book;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
     private ImageView coverImageView;
+
+    private EditText summaryEditText;
+    private EditText notesEditText;
 
     public BookFragment() {
         // Required empty public constructor
@@ -80,8 +83,7 @@ public class BookFragment extends Fragment {
                             // Do some nonsense with permissions
                             Context context = requireContext();
                             context.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        }
-                        catch(Exception exception) {
+                        } catch (Exception exception) {
                             Log.d("PhotoPicker", "Permissions failed ig");
                             return;
                         }
@@ -100,12 +102,20 @@ public class BookFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
 
-        // Setup cove ImageView
+        // Setup cover ImageView
         coverImageView = view.findViewById(R.id.coverImageView);
         if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
             coverImageView.setImageURI(Uri.parse(book.getCoverUri()));
         }
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
+
+        // Get summary EditText
+        summaryEditText = view.findViewById(R.id.summaryEditText);
+        summaryEditText.setText(book.getSummary());
+
+        // Get notes EditText
+        notesEditText = view.findViewById(R.id.notesEditText);
+        notesEditText.setText(book.getNotes());
 
         // Setup title TextView
         TextView titleTextView = view.findViewById(R.id.titleTextView);
@@ -134,11 +144,21 @@ public class BookFragment extends Fragment {
     }
 
     private void onSaveSummaryButtonClicked(View view) {
-        // todo
+        // Get summary text from EditText
+        String text = summaryEditText.getText().toString();
+        // Write text to database
+        bookDao.setSummary(bookIdParam, text);
+        // Show confirmation toast
+        Toast.makeText(getContext(), "Summary saved", Toast.LENGTH_SHORT).show();
     }
 
     private void onSaveNotesButtonClicked(View view) {
-        // todo
+        // Get notes text from EditText
+        String text = notesEditText.getText().toString();
+        // Write text to database
+        bookDao.setNotes(bookIdParam, text);
+        // Show confirmation toast
+        Toast.makeText(getContext(), "Notes saved", Toast.LENGTH_SHORT).show();
     }
 
     private void onCoverImageViewClicked(View view) {
