@@ -108,31 +108,42 @@ public class BookFragment extends Fragment {
         // Setup cover ImageView
         coverImageView = view.findViewById(R.id.profileImageView);
         if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
-            coverImageView.setImageURI(Uri.parse(book.getCoverUri()));
+            String uri = book.getCoverUri();
+            coverImageView.setImageURI(Uri.parse(uri));
         }
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Get summary EditText
         summaryEditText = view.findViewById(R.id.summaryEditText);
-        summaryEditText.setText(book.getSummary());
+        if (book.getSummary() != null && !book.getSummary().isEmpty()) {
+            summaryEditText.setText(book.getSummary());
+        }
 
         // Get notes EditText
         notesEditText = view.findViewById(R.id.notesEditText);
-        notesEditText.setText(book.getNotes());
+        if (book.getNotes() != null && !book.getNotes().isEmpty()) {
+            notesEditText.setText(book.getNotes());
+        }
 
         // Setup title TextView
         TextView titleTextView = view.findViewById(R.id.titleTextView);
-        titleTextView.setText(book.getTitle());
+        if (book.getTitle() != null && !book.getTitle().isEmpty()) {
+            titleTextView.setText(book.getTitle());
+        }
         titleTextView.setOnClickListener(this::onTitleTextViewClicked);
 
         // Setup author TextView
         TextView authorTextView = view.findViewById(R.id.authorTextView);
         authorTextView.setText(book.getAuthor());
+        if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            authorTextView.setText(book.getAuthor());
+        }
         authorTextView.setOnClickListener(this::onAuthorTextViewClicked);
 
         // Setup rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
-        ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", book.getRating()));
+        String ratingText = String.format(Locale.getDefault(), "Rating: %d/5", book.getRating());
+        ratingTextView.setText(ratingText);
         ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
         // Setup save summary Button
@@ -145,14 +156,18 @@ public class BookFragment extends Fragment {
 
         // Setup start date TextView
         TextView startDateTextView = view.findViewById(R.id.startDateTextView);
-        String startDateText = "Start Date: " + (book.getStartDate() == null ? "none" : book.getStartDate());
-        startDateTextView.setText(startDateText);
+        if (book.getStartDate() != null && !book.getStartDate().isEmpty()) {
+            String startDate = String.format(Locale.getDefault(), "Start Date: %s", book.getStartDate());
+            startDateTextView.setText(startDate);
+        }
         startDateTextView.setOnClickListener(this::onStartTextViewClicked);
 
         // Setup end date TextView
         TextView endDateTextView = view.findViewById(R.id.endDateTextView);
-        String endDateText = "End Date: " + (book.getStartDate() == null ? "none" : book.getEndDate());
-        endDateTextView.setText(endDateText);
+        if (book.getEndDate() != null && !book.getEndDate().isEmpty()) {
+            String endDate = String.format(Locale.getDefault(), "End Date: %s", book.getEndDate());
+            endDateTextView.setText(endDate);
+        }
         endDateTextView.setOnClickListener(this::onEndTextViewClicked);
 
         return view;
