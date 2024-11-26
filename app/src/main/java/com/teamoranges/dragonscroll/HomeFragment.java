@@ -93,8 +93,7 @@ public class HomeFragment extends Fragment {
             // Create new book
             Book book = new Book();
             book.setTitle(getRandomTitle());
-            book.setAuthor("Book Author");
-            book.setRating(1);
+            book.setAuthor("No Author");
 
             // Add book and update view
             addBook(book);
@@ -122,7 +121,7 @@ public class HomeFragment extends Fragment {
 
         // Set AlertDialog positive button
         alert.setPositiveButton("Delete", (dialogInterface, i) -> {
-            deleteBook(book);
+            deleteBook(book, position);
             updateNoBooksTextViewVisibility();
         });
 
@@ -145,24 +144,23 @@ public class HomeFragment extends Fragment {
         // Insert book into database
         bookDao.insertAll(book);
 
-        // Update the list
-        bookList.clear();
-        bookList.addAll(bookDao.getAll());
+        // Update the data list
+        bookList.add(book);
 
-        // Notify the adapter (bad)
-        bookAdapter.notifyDataSetChanged();
+        // Notify the adapter
+        bookAdapter.notifyItemInserted(bookList.size() - 1);
     }
 
-    private void deleteBook(Book book) {
+    private void deleteBook(Book book, int position) {
         // Delete book from database
         bookDao.delete(book);
 
-        // Update the list
-        bookList.clear();
-        bookList.addAll(bookDao.getAll());
+        // Update the data list
+        bookList.remove(position);
 
-        // Notify the adapter (baddd)
-        bookAdapter.notifyDataSetChanged();
+        // Notify the adapter
+        bookAdapter.notifyItemRemoved(position);
+        bookAdapter.notifyItemRangeChanged(position, bookList.size());
     }
 
     private String getRandomTitle() {

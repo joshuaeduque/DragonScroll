@@ -384,10 +384,11 @@ public class BookFragment extends Fragment {
     private void updateEndDate(View view, int year, int month, int day) {
         String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
+        // Update date in database
         bookDao.setEndDate(bookIdParam, date);
-
+        // Update date in view
         ((TextView) view).setText(String.format(Locale.getDefault(), "End Date: %s", date));
-
+        // Update local book date
         book.setEndDate(date);
     }
 
