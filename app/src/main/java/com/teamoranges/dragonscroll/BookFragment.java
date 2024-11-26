@@ -143,13 +143,36 @@ public class BookFragment extends Fragment {
         Button saveNotesButton = view.findViewById(R.id.saveNotesButton);
         saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
 
-        // todo
+        // Setup start date TextView
         TextView startDateTextView = view.findViewById(R.id.startDateTextView);
         String startDateText = "Start Date: " + (book.getStartDate() == null ? "none" : book.getStartDate());
         startDateTextView.setText(startDateText);
         startDateTextView.setOnClickListener(this::onStartTextViewClicked);
 
+        // Setup end date TextView
+        TextView endDateTextView = view.findViewById(R.id.endDateTextView);
+        String endDateText = "End Date: " + (book.getStartDate() == null ? "none" : book.getEndDate());
+        endDateTextView.setText(endDateText);
+        endDateTextView.setOnClickListener(this::onEndTextViewClicked);
+
         return view;
+    }
+
+    private void onEndTextViewClicked(View view) {
+        Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
+                // year month day
+                updateEndDate(view, i, i1, i2);
+            }
+        }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void onStartTextViewClicked(View view) {
@@ -348,14 +371,24 @@ public class BookFragment extends Fragment {
     }
 
     private void updateStartDate(View view, int year, int month, int day) {
-        String date = String.format(Locale.getDefault() ,"%d/%d/%d", year, month, day);
+        String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
         // Update date in database
         bookDao.setStartDate(bookIdParam, date);
         // Update date in view
-        ((TextView)view).setText(String.format(Locale.getDefault(), "Start Date: %s", date));
+        ((TextView) view).setText(String.format(Locale.getDefault(), "Start Date: %s", date));
         // Update local book date
         book.setStartDate(date);
+    }
+
+    private void updateEndDate(View view, int year, int month, int day) {
+        String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
+
+        bookDao.setEndDate(bookIdParam, date);
+
+        ((TextView) view).setText(String.format(Locale.getDefault(), "End Date: %s", date));
+
+        book.setEndDate(date);
     }
 
     // This is so hacky but it works for now
