@@ -2,14 +2,20 @@
     <string name="app_name">DragonScroll</string>
 
     <string name="edit">Edit</string>
-
     <string name="no_books">No books added!</string>
-    
-    <string name="books_read_default">Books Read: 0</string>
-    <string name="books_reading_default">Books Reading: 0</string>
-    <string name="time_reading_default">Time Spent Reading: 0d 0h 0m 0s</string>
-    <string name="favorite_book_default">Favorite Book: none</string>
+    <string name="summary">Summary</string>
+    <string name="notes">Notes</string>
+    <string name="save">Save</string>
+    <string name="books_read">Books Read: 0</string>
+    <string name="favorite_book">Favorite Book: none</string>
+    <string name="start_date">Start Date: none</string>
+    <string name="end_date">End Date: none</string>
 
+    <string name="profile_uri_key">com.teamoranges.dragonscroll.PROFILE_URI</string>
+    <string name="favorite_book_key">com.teamoranges.dragonscroll.FAVORITE_BOOK</string>
+
+    <string name="set_as_favorite">Set As Favorite</string>
+    
     <string name="profile_image_description">User profile image</string>
 
     <!-- SharedPreferences Keys -->
