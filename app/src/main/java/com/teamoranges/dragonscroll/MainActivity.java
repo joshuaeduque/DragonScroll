@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup NavigationUI with our AppBarConfiguration
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
         // Setup NavigationUI with the BottomNavigationView and NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
 
         // Create books database
         // Notice how we're allowed queries on the main thread
