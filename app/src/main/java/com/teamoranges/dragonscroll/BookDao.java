@@ -47,6 +47,9 @@ public interface BookDao {
     @Insert
     void insertAll(Book... books);
 
+    @Insert
+    long insert(Book book);
+
     @Delete
     void delete(Book book);
 

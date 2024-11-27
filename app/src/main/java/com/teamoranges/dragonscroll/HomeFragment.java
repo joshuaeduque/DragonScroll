@@ -142,9 +142,11 @@ public class HomeFragment extends Fragment {
 
     private void addBook(Book book) {
         // Insert book into database
-        bookDao.insertAll(book);
+        // bookDao.insertAll(book);
+        long insertId = bookDao.insert(book);
 
         // Update the data list
+        book.setId((int)insertId);
         bookList.add(book);
 
         // Notify the adapter
