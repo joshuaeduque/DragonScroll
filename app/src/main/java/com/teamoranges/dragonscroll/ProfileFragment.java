@@ -71,6 +71,7 @@ public class ProfileFragment extends Fragment {
     private String profileName;
     private SharedPreferences sharedPrefs;
     private String profileImageUri;
+    private String favoriteBook;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,10 @@ public class ProfileFragment extends Fragment {
 
         profileImageUri = sharedPrefs.getString(
                 getString(R.string.profile_uri_key),
+                null);
+
+        favoriteBook = sharedPrefs.getString(
+                getString(R.string.favorite_book_key),
                 null);
 
         // Registers a photo picker activity launcher in single-select mode.
@@ -151,7 +156,14 @@ public class ProfileFragment extends Fragment {
             profileImageView.setImageURI(uri);
         }
         profileImageView.setOnClickListener(this::onProfileImageViewClicked);
-        
+
+        // Setup favorite book
+        TextView favoriteBookTextView = view.findViewById(R.id.favoriteBookTextView);
+        if (favoriteBook != null) {
+            String favoriteBookText = String.format(Locale.getDefault(), "Favorite Book: %s", favoriteBook);
+            favoriteBookTextView.setText(favoriteBookText);
+        }
+
         return view;
     }
 

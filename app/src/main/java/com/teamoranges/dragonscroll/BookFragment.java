@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -43,6 +44,8 @@ public class BookFragment extends Fragment {
     private EditText summaryEditText;
     private EditText notesEditText;
 
+    private SharedPreferences sharedPrefs;
+
     public BookFragment() {
         // Required empty public constructor
     }
@@ -64,6 +67,11 @@ public class BookFragment extends Fragment {
         if (getArguments() != null) {
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
+
+        sharedPrefs = requireContext().getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+        );
 
         // Get BookDAO from MainActivity
         bookDao = ((MainActivity) requireActivity()).getBookDao();
@@ -170,7 +178,17 @@ public class BookFragment extends Fragment {
         }
         endDateTextView.setOnClickListener(this::onEndTextViewClicked);
 
+        // Setup favorites button
+        Button favoriteButton = view.findViewById(R.id.favoritesButton);
+        favoriteButton.setOnClickListener(this::onFavoriteButtonClicked);
+
         return view;
+    }
+
+    private void onFavoriteButtonClicked(View view) {
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(getString(R.string.favorite_book_key), book.getTitle());
+        editor.apply();
     }
 
     private void onEndTextViewClicked(View view) {
