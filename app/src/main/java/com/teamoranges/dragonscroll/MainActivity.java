@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
                 getString(R.string.preference_file_key), MODE_PRIVATE);
         if (sharedPreferences != null) {
             // Change theme before view is created
-            String theme = sharedPreferences.getString(
-                    getString(R.string.themes_preference_key), null);
+            String themesPreferenceKey = getString(R.string.themes_preference_key);
+            String theme = sharedPreferences.getString(themesPreferenceKey, null);
             if (theme != null) {
                 if (theme.equals("theme_blue")) {
                     setTheme(R.style.Blue_Theme_DragonScroll);
