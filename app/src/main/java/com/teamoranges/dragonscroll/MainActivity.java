@@ -35,8 +35,8 @@ public class MainActivity extends AppCompatActivity {
             String themesPreferenceKey = getString(R.string.themes_preference_key);
             String theme = sharedPreferences.getString(themesPreferenceKey, null);
             if (theme != null) {
-                if (theme.equals("theme_blue")) {
-                    setTheme(R.style.Blue_Theme_DragonScroll);
+                if (theme.equals("theme_red")) {
+                    setTheme(R.style.Red_Theme_DragonScroll);
                 }
             }
         }
