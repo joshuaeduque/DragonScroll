@@ -7,6 +7,12 @@
 
     <style name="Red.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/red</item>
+        <item name="materialButtonStyle">@style/Red.ButtonStyle</item>
+
+    </style>
+
+    <style name="Red.ButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Theme.DragonScroll" parent="Base.Theme.DragonScroll" />
