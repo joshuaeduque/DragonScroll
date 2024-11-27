@@ -20,7 +20,7 @@
     <ListPreference
         app:entries="@array/themes_entries"
         app:entryValues="@array/themes_values"
-        app:key="themes_preference"
+        app:key="@string/themes_preference_key"
         app:summary="@string/themes_summary"
         app:title="@string/themes_title" />
 

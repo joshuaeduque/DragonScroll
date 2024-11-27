@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -24,27 +25,39 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         );
 
         // Try getting clear preferences button
-        Preference clearPrefsButton = findPreference(getString(R.string.clear_prefs_key));
-        if (clearPrefsButton == null)
-            return;
+        Preference clearPreferencesButton = findPreference(getString(R.string.clear_prefs_key));
+        if (clearPreferencesButton != null) {
+            // Set clear prefs button onclick
+            clearPreferencesButton.setOnPreferenceClickListener((preference) -> {
+                // Clear SharedPreferences
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
 
-        // Set clear prefs button onclick
-        clearPrefsButton.setOnPreferenceClickListener((preference) -> {
-            // Clear SharedPreferences
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
+                return true;
+            });
+        }
 
-            return true;
-        });
+        // Setup nuke database button
+        Preference nukeDatabaseButton = findPreference("nuke_db_preference");
+        if (nukeDatabaseButton != null) {
+            nukeDatabaseButton.setOnPreferenceClickListener(preference -> {
+                BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
+                bookDao.nukeTable();
+                return true;
+            });
+        }
 
-        Preference nukeDbButton = findPreference("nuke_db_preference");
-        if (nukeDbButton == null)
-            return;
-        nukeDbButton.setOnPreferenceClickListener(preference -> {
-            BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
-            bookDao.nukeTable();
-            return true;
-        });
+        // Setup themes list
+        ListPreference themesList = findPreference(getString(R.string.themes_preference_key));
+        if(themesList != null) {
+            themesList.setOnPreferenceChangeListener(this::onThemesPreferenceChanged);
+        }
+    }
+
+    private boolean onThemesPreferenceChanged(Preference preference, Object o) {
+        // TODO actually validate theme selection
+        requireActivity().recreate();
+        return true;
     }
 }

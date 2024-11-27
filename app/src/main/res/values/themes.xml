@@ -5,5 +5,9 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="Blue.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+    </style>
+
     <style name="Theme.DragonScroll" parent="Base.Theme.DragonScroll" />
 </resources>

@@ -1,5 +1,6 @@
 package com.teamoranges.dragonscroll;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,6 +26,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Get shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), MODE_PRIVATE);
+        if (sharedPreferences != null) {
+            // Change theme before view is created
+            String theme = sharedPreferences.getString(
+                    getString(R.string.themes_preference_key), null);
+            if (theme != null) {
+                if (theme.equals("theme_blue")) {
+                    setTheme(R.style.Blue_Theme_DragonScroll);
+                }
+            }
+        }
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);

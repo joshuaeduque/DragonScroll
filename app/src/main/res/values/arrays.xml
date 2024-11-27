@@ -28,11 +28,11 @@
     <!-- Theme Preference -->
     <string-array name="themes_entries">
         <item>Default</item>
-        <item>TODO</item>
+        <item>Blue</item>
     </string-array>
 
     <string-array name="themes_values">
         <item>theme_default</item>
-        <item>theme_todo</item>
+        <item>theme_blue</item>
     </string-array>
 </resources>
