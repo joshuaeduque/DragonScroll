@@ -11,6 +11,8 @@ import androidx.preference.PreferenceFragmentCompat;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
+    private SharedPreferences sharedPreferences;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -19,7 +21,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Context context = requireContext();
 
         // Get SharedPreferences
-        SharedPreferences sharedPreferences = context.getSharedPreferences(
+        sharedPreferences = context.getSharedPreferences(
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE
         );
@@ -56,7 +58,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     }
 
     private boolean onThemesPreferenceChanged(Preference preference, Object o) {
-        // TODO actually validate theme selection
+        // Why do I have to commit the preference manually?
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.themes_preference_key), o.toString());
+        editor.commit();
+
         requireActivity().recreate();
         return true;
     }
