@@ -189,6 +189,8 @@ public class BookFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString(getString(R.string.favorite_book_key), book.getTitle());
         editor.apply();
+
+        Toast.makeText(requireContext(), "Set as favorite book", Toast.LENGTH_SHORT).show();
     }
 
     private void onEndTextViewClicked(View view) {

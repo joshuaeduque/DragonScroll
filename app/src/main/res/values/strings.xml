@@ -56,6 +56,7 @@
     <!-- Themes Preferences -->
     <string name="themes_title">Themes</string>
     <string name="themes_summary">Change theme</string>
+    <string name="themes_preference_key">themes_preference</string>
 
     <!-- Clear Preferences Preferences -->
     <string name="clear_prefs_key">clear_prefs_preference</string>

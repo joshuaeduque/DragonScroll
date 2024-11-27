@@ -4,4 +4,14 @@
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
     </style>
+
+    <style name="Red.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/red</item>
+        <item name="materialButtonStyle">@style/Red.ButtonStyle</item>
+    </style>
+    
+    <style name="Red.ButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
 </resources>
