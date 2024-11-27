@@ -2,15 +2,22 @@ package com.teamoranges.dragonscroll;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.PickVisualMediaRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -34,6 +41,10 @@ public class ProfileFragment extends Fragment {
     private BookDao bookDao;
 
     private int booksRead;
+
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    private ImageView profileImageView;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -59,6 +70,7 @@ public class ProfileFragment extends Fragment {
 
     private String profileName;
     private SharedPreferences sharedPrefs;
+    private String profileImageUri;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +81,7 @@ public class ProfileFragment extends Fragment {
         }
 
         // Get book DAO
-        bookDao = ((MainActivity)requireActivity()).getBookDao();
+        bookDao = ((MainActivity) requireActivity()).getBookDao();
         // Get books read
         booksRead = bookDao.getCount();
 
@@ -84,6 +96,35 @@ public class ProfileFragment extends Fragment {
                 getString(R.string.profile_name_key),
                 getString(R.string.profile_name_default)
         );
+
+        profileImageUri = sharedPrefs.getString(
+                getString(R.string.profile_uri_key),
+                null);
+
+        // Registers a photo picker activity launcher in single-select mode.
+        pickMedia =
+                registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
+                    // Callback is invoked after the user selects a media item or closes the
+                    // photo picker.
+                    if (uri != null) {
+                        Log.d("PhotoPicker", "Selected URI: " + uri);
+
+                        try {
+                            // Do some nonsense with permissions
+                            Context context = requireContext();
+                            context.getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        } catch (Exception exception) {
+                            Log.d("PhotoPicker", "Permissions failed ig");
+                            return;
+                        }
+
+                        // Update book cover
+                        // updateBookCover(coverImageView, uri);
+                        updateProfilePicture(uri);
+                    } else {
+                        Log.d("PhotoPicker", "No media selected");
+                    }
+                });
     }
 
     @Override
@@ -95,17 +136,42 @@ public class ProfileFragment extends Fragment {
         // Get profile name TextView
         TextView profileNameTextView = view.findViewById(R.id.nameTextView);
 
-        // Set profile name
+        // Setup profile name
         profileNameTextView.setText(this.profileName);
-
-        // Set profile name TextView on click listener
         profileNameTextView.setOnClickListener(this::onNameTextViewClicked);
 
         // Set books read TextView
         TextView booksReadTextView = view.findViewById(R.id.booksReadTextView);
         booksReadTextView.setText(String.format(Locale.getDefault(), "Books Read: %d", booksRead));
 
+        // Setup profile picture
+        profileImageView = view.findViewById(R.id.profileImageView);
+        if (profileImageUri != null) {
+            Uri uri = Uri.parse(profileImageUri);
+            profileImageView.setImageURI(uri);
+        }
+        profileImageView.setOnClickListener(this::onProfileImageViewClicked);
+        
         return view;
+    }
+
+    private void updateProfilePicture(Uri uri) {
+        String uriString = uri.toString();
+
+        profileImageView.setImageURI(uri);
+
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(
+                getString(R.string.profile_uri_key),
+                uriString);
+        editor.apply();
+    }
+
+    private void onProfileImageViewClicked(View view) {
+        // Launch the photo picker and let the user choose only images.
+        pickMedia.launch(new PickVisualMediaRequest.Builder()
+                .setMediaType(ActivityResultContracts.PickVisualMedia.ImageOnly.INSTANCE)
+                .build());
     }
 
     private void onNameTextViewClicked(View view) {
