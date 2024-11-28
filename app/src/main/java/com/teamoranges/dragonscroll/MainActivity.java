@@ -1,6 +1,7 @@
 package com.teamoranges.dragonscroll;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -68,6 +69,13 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             }
+            // Apply text size changes
+            float textSizeMultiplier = sharedPreferences.getFloat(
+                    getString(R.string.text_size_preference_key), 1.0f
+            );
+            Configuration configuration = getResources().getConfiguration();
+            configuration.fontScale = textSizeMultiplier;
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
         }
 
         super.onCreate(savedInstanceState);

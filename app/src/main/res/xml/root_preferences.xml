@@ -1,4 +1,5 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ListPreference
         app:entries="@array/themes_entries"
@@ -6,6 +7,15 @@
         app:key="@string/themes_preference_key"
         app:summary="@string/themes_summary"
         app:title="@string/themes_title" />
+
+    <SeekBarPreference
+        app:defaultValue="100"
+        app:key="@string/text_size_preference_key"
+        android:max="200"
+        app:min="50"
+        app:showSeekBarValue="true"
+        app:summary="@string/text_size_summary"
+        app:title="@string/text_size_title" />
 
     <Preference
         app:key="@string/clear_prefs_key"

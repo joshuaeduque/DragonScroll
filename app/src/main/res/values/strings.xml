@@ -51,7 +51,8 @@
 
     <!-- Text Size Preferences -->
     <string name="text_size_title">Text Size</string>
-    <string name="text_size_summary">Change text size</string>
+    <string name="text_size_summary">Adjust the text size of the app</string>
+    <string name="text_size_preference_key">text_size_preference</string>
 
     <!-- Themes Preferences -->
     <string name="themes_title">Themes</string>

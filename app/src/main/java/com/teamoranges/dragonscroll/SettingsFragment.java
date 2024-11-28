@@ -3,11 +3,11 @@ package com.teamoranges.dragonscroll;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.SeekBarPreference;
 
 public class SettingsFragment extends PreferenceFragmentCompat {
 
@@ -54,6 +54,22 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         ListPreference themesList = findPreference(getString(R.string.themes_preference_key));
         if(themesList != null) {
             themesList.setOnPreferenceChangeListener(this::onThemesPreferenceChanged);
+        }
+
+        // Setup text size seekbar
+        SeekBarPreference textSizeSlider = findPreference(getString(R.string.text_size_preference_key));
+        if (textSizeSlider != null) {
+            textSizeSlider.setOnPreferenceChangeListener((preference, newValue) -> {
+                int sliderValue = (Integer) newValue;
+                float textSizeMultiplier = sliderValue / 100f;
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putFloat(getString(R.string.text_size_preference_key), textSizeMultiplier);
+                editor.apply();
+
+                // Restart the activity to apply font size
+                requireActivity().recreate();
+                return true;
+            });
         }
     }
 
