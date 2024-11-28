@@ -1,5 +1,6 @@
 package com.teamoranges.dragonscroll;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -25,6 +26,21 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        // Get shared preferences
+        SharedPreferences sharedPreferences = getSharedPreferences(
+                getString(R.string.preference_file_key), MODE_PRIVATE);
+        if (sharedPreferences != null) {
+            // Change theme before view is created
+            String themesPreferenceKey = getString(R.string.themes_preference_key);
+            String theme = sharedPreferences.getString(themesPreferenceKey, null);
+            if (theme != null) {
+                if (theme.equals("theme_red")) {
+                    setTheme(R.style.Red_Theme_DragonScroll);
+                }
+            }
+        }
+
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
@@ -60,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         // Setup NavigationUI with our AppBarConfiguration
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
         // Setup NavigationUI with the BottomNavigationView and NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController);
+        NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
 
         // Create books database
         // Notice how we're allowed queries on the main thread
