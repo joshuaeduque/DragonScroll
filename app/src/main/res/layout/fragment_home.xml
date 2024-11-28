@@ -31,7 +31,23 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/timerTextView"
+            android:layout_width="125dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:text="Timer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:text="Start"
+            app:layout_constraintEnd_toStartOf="@+id/timerTextView"
+            app:layout_constraintTop_toTopOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

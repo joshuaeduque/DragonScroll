@@ -177,4 +177,5 @@ public class HomeFragment extends Fragment {
                 nouns[random.nextInt(nouns.length)]
         );
     }
+
 }
