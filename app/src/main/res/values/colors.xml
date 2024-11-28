@@ -5,4 +5,11 @@
     <color name="cyan">#FF548AF7</color>
     <color name="blue">#FF0000FF</color>
     <color name="red">#FFFF0000</color>
+    <color name="orange">#FF8C00</color>
+    <color name="yellow">#FFD500</color>
+    <color name="green">#2FFF00</color>
+    <color name="purple">#7700FF</color>
+    <color name="pink">#FF00E5</color>
+    <color name="brown">#75300A</color>
+    <color name="gray">#898989</color>
 </resources>

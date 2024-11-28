@@ -5,19 +5,106 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <!-- Red -->
     <style name="Red.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="colorPrimary">@color/red</item>
-        <item name="materialButtonStyle">@style/Red.ButtonStyle</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
         <item name="bottomNavigationStyle">@style/Red.BottomNavigationStyle</item>
     </style>
 
     <style name="Red.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
         <item name="itemIconTint">@color/red</item>
     </style>
-
-    <style name="Red.ButtonStyle" parent="Widget.Material3.Button">
-        <item name="android:textColor">@color/white</item>
+    <!-- Orange -->
+    <style name="Orange.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/orange</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Orange.BottomNavigationStyle</item>
     </style>
 
+    <style name="Orange.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/orange</item>
+    </style>
+
+    <!-- Yellow -->
+    <style name="Yellow.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/yellow</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Yellow.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Yellow.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/yellow</item>
+    </style>
+
+    <!-- Green -->
+    <style name="Green.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/green</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Green.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Green.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/green</item>
+    </style>
+
+    <!-- Blue -->
+    <style name="Blue.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/blue</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Blue.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Blue.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/blue</item>
+    </style>
+
+    <!-- Purple -->
+    <style name="Purple.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/purple</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Purple.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Purple.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/purple</item>
+    </style>
+
+    <!-- Pink -->
+    <style name="Pink.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/pink</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Pink.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Pink.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/pink</item>
+    </style>
+
+    <!-- Brown -->
+    <style name="Brown.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/brown</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Brown.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Brown.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/brown</item>
+    </style>
+
+    <!-- Gray -->
+    <style name="Gray.Theme.DragonScroll" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/gray</item>
+        <item name="materialButtonStyle">@style/ButtonStyle</item>
+        <item name="bottomNavigationStyle">@style/Gray.BottomNavigationStyle</item>
+    </style>
+
+    <style name="Gray.BottomNavigationStyle" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemIconTint">@color/gray</item>
+    </style>
+
+    <style name="ButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:textColor">@color/white</item>
+    </style>
     <style name="Theme.DragonScroll" parent="Base.Theme.DragonScroll" />
 </resources>

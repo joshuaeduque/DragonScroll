@@ -35,8 +35,37 @@ public class MainActivity extends AppCompatActivity {
             String themesPreferenceKey = getString(R.string.themes_preference_key);
             String theme = sharedPreferences.getString(themesPreferenceKey, null);
             if (theme != null) {
-                if (theme.equals("theme_red")) {
-                    setTheme(R.style.Red_Theme_DragonScroll);
+                switch (theme) {
+                    case "theme_red":
+                        setTheme(R.style.Red_Theme_DragonScroll);
+                        break;
+                    case "theme_orange":
+                        setTheme(R.style.Orange_Theme_DragonScroll);
+                        break;
+                    case "theme_yellow":
+                        setTheme(R.style.Yellow_Theme_DragonScroll);
+                        break;
+                    case "theme_green":
+                        setTheme(R.style.Green_Theme_DragonScroll);
+                        break;
+                    case "theme_blue":
+                        setTheme(R.style.Blue_Theme_DragonScroll);
+                        break;
+                    case "theme_purple":
+                        setTheme(R.style.Purple_Theme_DragonScroll);
+                        break;
+                    case "theme_pink":
+                        setTheme(R.style.Pink_Theme_DragonScroll);
+                        break;
+                    case "theme_brown":
+                        setTheme(R.style.Brown_Theme_DragonScroll);
+                        break;
+                    case "theme_gray":
+                        setTheme(R.style.Gray_Theme_DragonScroll);
+                        break;
+                    default:
+                        setTheme(R.style.Base_Theme_DragonScroll);
+                        break;
                 }
             }
         }
