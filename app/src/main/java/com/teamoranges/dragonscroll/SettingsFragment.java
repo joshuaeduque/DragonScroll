@@ -1,8 +1,10 @@
 package com.teamoranges.dragonscroll;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
@@ -26,16 +28,17 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 Context.MODE_PRIVATE
         );
 
-        // Try getting clear preferences button
+        // Clear Preferences Button
         Preference clearPreferencesButton = findPreference(getString(R.string.clear_prefs_key));
         if (clearPreferencesButton != null) {
-            // Set clear prefs button onclick
-            clearPreferencesButton.setOnPreferenceClickListener((preference) -> {
+            clearPreferencesButton.setOnPreferenceClickListener(preference -> {
                 // Clear SharedPreferences
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.clear();
                 editor.apply();
-
+                // Reset UI elements to their default values
+                resetPreferencesUI();
+                Toast.makeText(context, "Preferences cleared successfully", Toast.LENGTH_SHORT).show();
                 return true;
             });
         }
@@ -44,8 +47,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         Preference nukeDatabaseButton = findPreference("nuke_db_preference");
         if (nukeDatabaseButton != null) {
             nukeDatabaseButton.setOnPreferenceClickListener(preference -> {
-                BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
-                bookDao.nukeTable();
+                // Show a confirmation dialog
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Confirm Action")
+                        .setMessage("Are you sure you want to nuke the database? This action cannot be undone!")
+                        .setPositiveButton("Yes", (dialog, which) -> {
+                            // Nuke the database
+                            BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
+                            bookDao.nukeTable();
+                            Toast.makeText(requireContext(), "Database nuked successfully", Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss())
+                        .show();
                 return true;
             });
         }
@@ -81,5 +94,20 @@ public class SettingsFragment extends PreferenceFragmentCompat {
 
         requireActivity().recreate();
         return true;
+    }
+
+    private void resetPreferencesUI() {
+        SeekBarPreference textSizeSlider = findPreference(getString(R.string.text_size_preference_key));
+        ListPreference themeList = findPreference(getString(R.string.themes_preference_key));
+        // Reset SeekBarPreference for font size
+        if (textSizeSlider != null) {
+            textSizeSlider.setValue(100);
+        }
+        // Reset Themes list to default
+        if (themeList != null) {
+            themeList.setValue(getString(R.string.default_theme_value));
+            themeList.setSummary(themeList.getEntry());
+        }
+        requireActivity().recreate();
     }
 }

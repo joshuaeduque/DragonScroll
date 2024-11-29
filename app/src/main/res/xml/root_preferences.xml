@@ -23,8 +23,8 @@
         app:title="@string/clear_prefs_title" />
 
     <Preference
-        app:key="nuke_db_preference"
-        app:summary="Nuke Room database"
-        app:title="Nuke Database" />
+        app:key="@string/nuke_db_key"
+        app:summary="@string/nuke_db_summary"
+        app:title="@string/nuke_db_title" />
 
 </PreferenceScreen>

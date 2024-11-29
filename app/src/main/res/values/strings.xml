@@ -58,9 +58,15 @@
     <string name="themes_title">Themes</string>
     <string name="themes_summary">Change theme</string>
     <string name="themes_preference_key">themes_preference</string>
+    <string name="default_theme_value">Base.Theme.DragonScroll</string>
 
     <!-- Clear Preferences Preferences -->
     <string name="clear_prefs_key">clear_prefs_preference</string>
     <string name="clear_prefs_title">Clear Preferences</string>
     <string name="clear_prefs_summary">Clear application preferences</string>
+
+    <!-- Nuke Database Preferences -->
+    <string name="nuke_db_key">nuke_db_preference</string>
+    <string name="nuke_db_title">Nuke Database</string>
+    <string name="nuke_db_summary">Delete all save data</string>
 </resources>
