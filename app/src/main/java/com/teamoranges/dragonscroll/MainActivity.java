@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -76,6 +77,20 @@ public class MainActivity extends AppCompatActivity {
             Configuration configuration = getResources().getConfiguration();
             configuration.fontScale = textSizeMultiplier;
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            // Apply dark mode preference
+            String darkModePreferenceKey = getString(R.string.dark_mode_key);
+            String darkMode = sharedPreferences.getString(darkModePreferenceKey, "system");
+            switch (darkMode) {
+                case "light":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                case "dark":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+                default:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
+            }
         }
 
         super.onCreate(savedInstanceState);
