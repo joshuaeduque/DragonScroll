@@ -3,6 +3,7 @@ package com.teamoranges.dragonscroll;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
@@ -14,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -32,6 +34,14 @@ public class HomeFragment extends Fragment {
     private List<Book> bookList;
     private BookAdapter bookAdapter;
     private TextView noBooksTextView;
+
+    // Timer-related fields
+    private TextView timerTextView;
+    private Button startButton;
+    private Handler handler;
+    private Runnable timerRunnable;
+    private long startTime;
+    private boolean isTimerRunning = false;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -84,7 +94,7 @@ public class HomeFragment extends Fragment {
         // Navigate to BookFragment with book data
         bookAdapter = new BookAdapter(bookList, this::onBookClick, this::onBookLongClick);
 
-        // Setup RecyclerView with BookAdapter 
+        // Setup RecyclerView with BookAdapter
         recyclerView.setAdapter(bookAdapter);
 
         // Set FloatingActionButton on click listener
@@ -102,7 +112,82 @@ public class HomeFragment extends Fragment {
             updateNoBooksTextViewVisibility();
         });
 
+        // Timer setup
+        timerTextView = view.findViewById(R.id.timerTextView);
+        startButton = view.findViewById(R.id.startButton);
+
+        startButton.setOnClickListener(v -> toggleTimer());
+
         return view;
+    }
+
+    private void toggleTimer() {
+        if (isTimerRunning) {
+            // Stop the timer
+            handler.removeCallbacks(timerRunnable);
+            startButton.setText("Start");
+        } else {
+            // Start the timer
+            startCounting();
+            startButton.setText("Stop");
+        }
+        isTimerRunning = !isTimerRunning;
+    }
+
+    private void startCounting() {
+        if (handler == null) {
+            handler = new Handler();
+        }
+
+        // Record the start time
+        startTime = System.currentTimeMillis();
+
+        // Define the Runnable
+        timerRunnable = new Runnable() {
+            @Override
+            public void run() {
+                long elapsedMillis = System.currentTimeMillis() - startTime;
+                long seconds = elapsedMillis / 1000 % 60;
+                long minutes = elapsedMillis / 1000 / 60;
+
+                // Update the TextView
+                timerTextView.setText(String.format("%02d:%02d", minutes, seconds));
+
+                // Schedule the next update
+                handler.postDelayed(this, 1000);
+            }
+        };
+
+        // Start the Runnable
+        handler.post(timerRunnable);
+    }
+
+    private void updateNoBooksTextViewVisibility() {
+        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
+    }
+
+    private void addBook(Book book) {
+        // Insert book into database
+        long insertId = bookDao.insert(book);
+
+        // Update the data list
+        book.setId((int) insertId);
+        bookList.add(book);
+
+        // Notify the adapter
+        bookAdapter.notifyItemInserted(bookList.size() - 1);
+    }
+
+    private void deleteBook(Book book, int position) {
+        // Delete book from database
+        bookDao.delete(book);
+
+        // Update the data list
+        bookList.remove(position);
+
+        // Notify the adapter
+        bookAdapter.notifyItemRemoved(position);
+        bookAdapter.notifyItemRangeChanged(position, bookList.size());
     }
 
     private void onBookClick(Book book, int position) {
@@ -136,33 +221,14 @@ public class HomeFragment extends Fragment {
         return false;
     }
 
-    private void updateNoBooksTextViewVisibility() {
-        noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
-    }
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
 
-    private void addBook(Book book) {
-        // Insert book into database
-        // bookDao.insertAll(book);
-        long insertId = bookDao.insert(book);
-
-        // Update the data list
-        book.setId((int)insertId);
-        bookList.add(book);
-
-        // Notify the adapter
-        bookAdapter.notifyItemInserted(bookList.size() - 1);
-    }
-
-    private void deleteBook(Book book, int position) {
-        // Delete book from database
-        bookDao.delete(book);
-
-        // Update the data list
-        bookList.remove(position);
-
-        // Notify the adapter
-        bookAdapter.notifyItemRemoved(position);
-        bookAdapter.notifyItemRangeChanged(position, bookList.size());
+        // Stop the Runnable when the view is destroyed
+        if (handler != null && timerRunnable != null) {
+            handler.removeCallbacks(timerRunnable);
+        }
     }
 
     private String getRandomTitle() {
@@ -177,5 +243,4 @@ public class HomeFragment extends Fragment {
                 nouns[random.nextInt(nouns.length)]
         );
     }
-
 }

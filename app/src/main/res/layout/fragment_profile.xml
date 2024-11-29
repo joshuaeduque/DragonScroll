@@ -53,6 +53,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/booksReadTextView" />
+        <TextView
+            android:id="@+id/totalTimeTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Total Time Spent Reading: 0h 0m 0s"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/favoriteBookTextView" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
