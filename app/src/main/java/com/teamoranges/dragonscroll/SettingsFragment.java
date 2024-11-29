@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -84,6 +85,11 @@ public class SettingsFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
+        // Setup dark mode preference
+        ListPreference darkModePreference = findPreference(getString(R.string.dark_mode_key));
+        if(darkModePreference != null) {
+            darkModePreference.setOnPreferenceChangeListener(this::onDarkModePreferenceChanged);
+        }
     }
 
     private boolean onThemesPreferenceChanged(Preference preference, Object o) {
@@ -96,9 +102,18 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         return true;
     }
 
+    private boolean onDarkModePreferenceChanged(Preference preference, Object o) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(getString(R.string.dark_mode_key), o.toString());
+        editor.commit();
+
+        requireActivity().recreate();
+        return true;
+    }
     private void resetPreferencesUI() {
         SeekBarPreference textSizeSlider = findPreference(getString(R.string.text_size_preference_key));
         ListPreference themeList = findPreference(getString(R.string.themes_preference_key));
+        ListPreference darkMode = findPreference(getString(R.string.dark_mode_key));
         // Reset SeekBarPreference for font size
         if (textSizeSlider != null) {
             textSizeSlider.setValue(100);
@@ -106,7 +121,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         // Reset Themes list to default
         if (themeList != null) {
             themeList.setValue(getString(R.string.default_theme_value));
-            themeList.setSummary(themeList.getEntry());
+        }
+        //Reset Dark Mode list to default
+        if (darkMode != null) {
+            darkMode.setValue(getString(R.string.default_dark_mode_value));
         }
         requireActivity().recreate();
     }
