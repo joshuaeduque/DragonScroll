@@ -14,7 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamoranges.dragonscroll.models.Book;
@@ -32,6 +36,7 @@ public class HomeFragment extends Fragment {
     private List<Book> bookList;
     private BookAdapter bookAdapter;
     private TextView noBooksTextView;
+    private LinearLayout inputContainer;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -71,6 +76,12 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
+        // Initialize user input views
+        inputContainer = view.findViewById(R.id.inputContainer);
+        Button addBookButton = view.findViewById(R.id.addBookButton);
+        EditText bookTitleText = view.findViewById(R.id.bookTitleText);
+        EditText bookAuthorText = view.findViewById(R.id.bookAuthorText);
+
         // Get Activity BookDao
         bookDao = ((MainActivity) requireActivity()).getBookDao();
         // Populate book list from BookDao
@@ -90,18 +101,46 @@ public class HomeFragment extends Fragment {
         // Set FloatingActionButton on click listener
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
         floatingActionButton.setOnClickListener(v -> {
-            // Create new book
-            Book book = new Book();
-            book.setTitle(getRandomTitle());
-            book.setAuthor("No Author");
-
-            // Add book and update view
-            addBook(book);
-
-            // Update noBooksTextView visibility
-            updateNoBooksTextViewVisibility();
+            if(inputContainer.getVisibility() == View.GONE) {
+                inputContainer.setVisibility(View.VISIBLE);
+            }
+            else {
+                inputContainer.setVisibility(View.GONE);
+            }
         });
 
+        // Set focus change when clicked
+        setHintOnFocus(bookTitleText, "Author");
+        setHintOnFocus(bookAuthorText, "Author");
+
+        addBookButton.setOnClickListener(v -> {
+            String title = bookTitleText.getText().toString().trim();
+            String author = bookAuthorText.getText().toString().trim();
+
+            if(title.isEmpty() || author.isEmpty()) {
+                Toast.makeText(context, "Please enter both field.", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                // TODO - need to capitalize title and author
+
+                // make new book with user input
+                Book book = new Book();
+                book.setTitle(title);
+                book.setAuthor(author);
+                addBook(book);
+
+                // clear input
+                bookTitleText.setText("");
+                bookAuthorText.setText("");
+
+                inputContainer.setVisibility(View.GONE);
+                Toast.makeText(context, "Book added successfully", Toast.LENGTH_SHORT).show();
+
+            }
+
+        });
+
+        updateNoBooksTextViewVisibility();
         return view;
     }
 
@@ -165,16 +204,14 @@ public class HomeFragment extends Fragment {
         bookAdapter.notifyItemRangeChanged(position, bookList.size());
     }
 
-    private String getRandomTitle() {
-        String[] adjectives = {"Lost", "Hidden", "Secret", "Dark", "Silent", "Ancient", "Haunted"};
-        String[] nouns = {"Kingdom", "Garden", "Dreams", "Echoes", "Stars", "Journey", "Legacy"};
+    // helper function to handle visibility of focus
+    private void setHintOnFocus(EditText editText, String hint) {
 
-        Random random = new Random();
-
-        return String.format(
-                "%s %s",
-                adjectives[random.nextInt(adjectives.length)],
-                nouns[random.nextInt(nouns.length)]
-        );
+        editText.setOnFocusChangeListener((view, hasFocus) -> {
+            if(hasFocus) {
+                editText.setHint("");
+            }
+        });
     }
+
 }
