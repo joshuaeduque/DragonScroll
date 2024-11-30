@@ -1,6 +1,9 @@
 # DragonScroll 📖
 Personal book logger for Android developed for CS 3443 Application Programming.
 
+## Build Instructions
+To build DragonScroll, clone the master branch of the repository. This produces a project that can be opened in Android Studio. From there, you may have to select `File -> Sync Project with Gradle Files` before building.
+
 ## Light Mode Warning
 While DragonScroll supports light mode, is was developed with dark mode in mind and should be used with such.
 

@@ -42,8 +42,10 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
 
     <!-- Dark Mode Preferences -->
+    <string name="dark_mode_key">dark_mode_preference</string>
     <string name="dark_mode_title">Dark Mode</string>
     <string name="dark_mode_summary">Toggle between dark and light mode</string>
+    <string name="default_dark_mode_value">system</string>
 
     <!-- High Contrast Preferences -->
     <string name="high_contrast_title">High Contrast</string>
@@ -51,15 +53,22 @@
 
     <!-- Text Size Preferences -->
     <string name="text_size_title">Text Size</string>
-    <string name="text_size_summary">Change text size</string>
+    <string name="text_size_summary">Adjust the text size of the app</string>
+    <string name="text_size_preference_key">text_size_preference</string>
 
     <!-- Themes Preferences -->
     <string name="themes_title">Themes</string>
     <string name="themes_summary">Change theme</string>
     <string name="themes_preference_key">themes_preference</string>
+    <string name="default_theme_value">theme_default</string>
 
     <!-- Clear Preferences Preferences -->
     <string name="clear_prefs_key">clear_prefs_preference</string>
     <string name="clear_prefs_title">Clear Preferences</string>
     <string name="clear_prefs_summary">Clear application preferences</string>
+
+    <!-- Nuke Database Preferences -->
+    <string name="nuke_db_key">nuke_db_preference</string>
+    <string name="nuke_db_title">Nuke Database</string>
+    <string name="nuke_db_summary">Delete all save data</string>
 </resources>

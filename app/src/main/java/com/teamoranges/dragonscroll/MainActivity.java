@@ -1,11 +1,13 @@
 package com.teamoranges.dragonscroll;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -35,9 +37,59 @@ public class MainActivity extends AppCompatActivity {
             String themesPreferenceKey = getString(R.string.themes_preference_key);
             String theme = sharedPreferences.getString(themesPreferenceKey, null);
             if (theme != null) {
-                if (theme.equals("theme_red")) {
-                    setTheme(R.style.Red_Theme_DragonScroll);
+                switch (theme) {
+                    case "theme_red":
+                        setTheme(R.style.Red_Theme_DragonScroll);
+                        break;
+                    case "theme_orange":
+                        setTheme(R.style.Orange_Theme_DragonScroll);
+                        break;
+                    case "theme_yellow":
+                        setTheme(R.style.Yellow_Theme_DragonScroll);
+                        break;
+                    case "theme_green":
+                        setTheme(R.style.Green_Theme_DragonScroll);
+                        break;
+                    case "theme_blue":
+                        setTheme(R.style.Blue_Theme_DragonScroll);
+                        break;
+                    case "theme_purple":
+                        setTheme(R.style.Purple_Theme_DragonScroll);
+                        break;
+                    case "theme_pink":
+                        setTheme(R.style.Pink_Theme_DragonScroll);
+                        break;
+                    case "theme_brown":
+                        setTheme(R.style.Brown_Theme_DragonScroll);
+                        break;
+                    case "theme_gray":
+                        setTheme(R.style.Gray_Theme_DragonScroll);
+                        break;
+                    default:
+                        setTheme(R.style.Base_Theme_DragonScroll);
+                        break;
                 }
+            }
+            // Apply text size changes
+            float textSizeMultiplier = sharedPreferences.getFloat(
+                    getString(R.string.text_size_preference_key), 1.0f
+            );
+            Configuration configuration = getResources().getConfiguration();
+            configuration.fontScale = textSizeMultiplier;
+            getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            // Apply dark mode preference
+            String darkModePreferenceKey = getString(R.string.dark_mode_key);
+            String darkMode = sharedPreferences.getString(darkModePreferenceKey, "system");
+            switch (darkMode) {
+                case "light":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                case "dark":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+                default:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
             }
         }
 

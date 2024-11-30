@@ -29,10 +29,38 @@
     <string-array name="themes_entries">
         <item>Default</item>
         <item>Red</item>
+        <item>Orange</item>
+        <item>Yellow</item>
+        <item>Green</item>
+        <item>Blue</item>
+        <item>Purple</item>
+        <item>Pink</item>
+        <item>Brown</item>
+        <item>Gray</item>
     </string-array>
 
     <string-array name="themes_values">
         <item>theme_default</item>
         <item>theme_red</item>
+        <item>theme_orange</item>
+        <item>theme_yellow</item>
+        <item>theme_green</item>
+        <item>theme_blue</item>
+        <item>theme_purple</item>
+        <item>theme_pink</item>
+        <item>theme_brown</item>
+        <item>theme_gray</item>
+    </string-array>
+    <!-- Dark Mode Preference -->
+    <string-array name="dark_mode_entries">
+        <item>System Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="dark_mode_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
     </string-array>
 </resources>
