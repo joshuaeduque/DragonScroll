@@ -111,6 +111,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         requireActivity().recreate();
         return true;
     }
+
+    /**
+     * Default all SharedPreferences entries
+     */
     private void resetPreferencesUI() {
         SeekBarPreference textSizeSlider = findPreference(getString(R.string.text_size_preference_key));
         ListPreference themeList = findPreference(getString(R.string.themes_preference_key));

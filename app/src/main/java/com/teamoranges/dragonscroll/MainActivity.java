@@ -19,6 +19,10 @@ import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * The sole activity of the app. It configures things like the app's theme,
+ * {@link BottomNavigationView}, and {@link AppDatabase}.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private AppDatabase database;

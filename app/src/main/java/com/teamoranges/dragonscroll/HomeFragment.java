@@ -22,6 +22,11 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * HomeFragment represents the view a user sees when the select the home item in the
+ * bottom navigation view. It displays a clickable list of books that navigate to their own
+ * BookFragment.
+ */
 public class HomeFragment extends Fragment {
 
     private Context context;

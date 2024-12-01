@@ -30,22 +30,28 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * BookFragment represents the view a user sees when they click an entry in the book list.
+ * It allows them to view and edit the book's title, author, etc.
+ */
 public class BookFragment extends Fragment {
 
+    // Key string used to pass in a book ID
     private static final String BOOK_ID_KEY = "bookId";
 
+    // Book ID passed to the book fragment
     private int bookIdParam;
 
+    // Book retrieved from database by ID
     private Book book;
 
     private BookDao bookDao;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private SharedPreferences sharedPreferences;
 
     private ImageView coverImageView;
     private EditText summaryEditText;
     private EditText notesEditText;
-
-    private SharedPreferences sharedPreferences;
 
     public BookFragment() {
         // Required empty public constructor
@@ -54,9 +60,9 @@ public class BookFragment extends Fragment {
     public static BookFragment newInstance(int bookId) {
         BookFragment fragment = new BookFragment();
 
+        // Get arguments from bundle
         Bundle args = new Bundle();
         args.putInt(BOOK_ID_KEY, bookId);
-
         fragment.setArguments(args);
 
         return fragment;
@@ -67,6 +73,7 @@ public class BookFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
+            // Get book id from fragment bundle
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
 
