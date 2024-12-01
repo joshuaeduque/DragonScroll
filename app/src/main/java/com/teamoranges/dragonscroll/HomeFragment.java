@@ -10,6 +10,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,12 +77,6 @@ public class HomeFragment extends Fragment {
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-        // Initialize user input views
-        inputContainer = view.findViewById(R.id.inputContainer);
-        Button addBookButton = view.findViewById(R.id.addBookButton);
-        EditText bookTitleText = view.findViewById(R.id.bookTitleText);
-        EditText bookAuthorText = view.findViewById(R.id.bookAuthorText);
-
         // Get Activity BookDao
         bookDao = ((MainActivity) requireActivity()).getBookDao();
         // Populate book list from BookDao
@@ -100,48 +95,58 @@ public class HomeFragment extends Fragment {
 
         // Set FloatingActionButton on click listener
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(v -> {
-            if(inputContainer.getVisibility() == View.GONE) {
-                inputContainer.setVisibility(View.VISIBLE);
-            }
-            else {
-                inputContainer.setVisibility(View.GONE);
-            }
-        });
+        floatingActionButton.setOnClickListener(v -> showAddBookDialog());
 
-        // Set focus change when clicked
-        setHintOnFocus(bookTitleText, "Author");
-        setHintOnFocus(bookAuthorText, "Author");
-
-        addBookButton.setOnClickListener(v -> {
-            String title = bookTitleText.getText().toString().trim();
-            String author = bookAuthorText.getText().toString().trim();
-
-            if(title.isEmpty() || author.isEmpty()) {
-                Toast.makeText(context, "Please enter both field.", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                // TODO - need to capitalize title and author
-
-                // make new book with user input
-                Book book = new Book();
-                book.setTitle(title);
-                book.setAuthor(author);
-                addBook(book);
-
-                // clear input
-                bookTitleText.setText("");
-                bookAuthorText.setText("");
-
-                inputContainer.setVisibility(View.GONE);
-                Toast.makeText(context, "Book added successfully", Toast.LENGTH_SHORT).show();
-
-            }
-
-        });
-
-        updateNoBooksTextViewVisibility();
         return view;
+    }
+
+    private void showAddBookDialog() {
+        // Inflate the existing LinearLayout
+        View dialogView = getView().findViewById(R.id.alertDialogCustomView);
+
+        // Avoid IllegalStateException
+        if (dialogView.getParent() != null) {
+            ((ViewGroup) dialogView.getParent()).removeView(dialogView);
+        }
+
+        // Set the visibility of the input container to visible
+        dialogView.setVisibility(View.VISIBLE);
+
+        // Get the EditText fields
+        EditText bookTitleEditText = dialogView.findViewById(R.id.dialogBookTitleText);
+        EditText bookAuthorEditText = dialogView.findViewById(R.id.dialogBookAuthorText);
+
+        // Create the AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
+        alert.setTitle("Add Book")
+                .setView(dialogView)
+                .setPositiveButton("Add", (dialogInterface, i) -> {
+                    String title = bookTitleEditText.getText().toString().trim();
+                    String author = bookAuthorEditText.getText().toString().trim();
+
+                    // Validate input
+                    if (title.isEmpty() || author.isEmpty()) {
+                        Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    // Create a new Book object
+                    Book book = new Book();
+                    book.setTitle(title);
+                    book.setAuthor(author);
+
+                    // Add the book to the database or list
+                    addBook(book);
+
+                    // Notify the user
+                    Toast.makeText(requireContext(), "Book added!", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancel", (dialogInterface, i) -> {
+                    // Reset the visibility of the LinearLayout to GONE when the dialog is dismissed
+                    dialogView.setVisibility(View.GONE);
+                    dialogInterface.dismiss();
+                })
+                .show();
     }
 
     private void onBookClick(Book book, int position) {
@@ -202,16 +207,6 @@ public class HomeFragment extends Fragment {
         // Notify the adapter
         bookAdapter.notifyItemRemoved(position);
         bookAdapter.notifyItemRangeChanged(position, bookList.size());
-    }
-
-    // helper function to handle visibility of focus
-    private void setHintOnFocus(EditText editText, String hint) {
-
-        editText.setOnFocusChangeListener((view, hasFocus) -> {
-            if(hasFocus) {
-                editText.setHint("");
-            }
-        });
     }
 
 }
