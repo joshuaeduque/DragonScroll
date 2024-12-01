@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
     private BookDao bookDao;
     private BookAdapter bookAdapter;
     private NavController navController;
-    
+
     private TextView noBooksTextView;
 
     public HomeFragment() {
