@@ -10,70 +10,130 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.List;
 
 /**
- * Direct access object interface for the app's Room database.
+ * BookDao is a direct access java object interface for the app's Room database.
  * It defines methods that translate to SQLite queries for reading and writing
  * {@link Book} data.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 @Dao
 public interface BookDao {
-
-    // Get every book in the table
+    /**
+     * Getter to return every Book in the table
+     * @return List of all Books in the table
+     */
     @Query("SELECT * FROM book")
     List<Book> getAll();
 
-    // Get the number of books in the table
+    /**
+     * Getter to return the number of Books in the table.
+     * @return int of the number of Books in the table.
+     */
     @Query("SELECT COUNT(*) FROM book")
     int getCount();
 
-    // Get a book from the table by id
+    /**
+     * Getter to return a Book from the table by ID.
+     * @param id ID of the Book (int)
+     * @return Book that matches the ID
+     */
     @Query("SELECT * FROM book WHERE id = :id LIMIT 1")
     Book getBook(int id);
 
-    // Set a book's title by id
+    /**
+     * Setter to set a Book's title by ID.
+     * @param id ID of the Book (int)
+     * @param title Title of the Book (String)
+     */
     @Query("UPDATE book SET title = :title WHERE id = :id")
     void setTitle(int id, String title);
 
-    // Set a book's author by id
+    /**
+     * Setter to set a Book's author by ID.
+     * @param id ID of the Book (int)
+     * @param author Author of the Book (String)
+     */
     @Query("UPDATE book SET author = :author WHERE id = :id")
     void setAuthor(int id, String author);
 
-    // Set a book's rating by id
+    /**
+     * Setter to set a Book's rating by ID.
+     * @param id ID of the Book (int)
+     * @param rating Rating of the Book (int)
+     */
     @Query("UPDATE book SET rating = :rating WHERE id = :id")
     void setRating(int id, int rating);
 
-    // Set a book's cover uri string by id
+    /**
+     * Setter to set a Book's Cover URI by ID.
+     * @param id ID of the Book (int)
+     * @param coverUri Cover URI of the Book (String)
+     */
     @Query("UPDATE book SET cover_uri = :coverUri WHERE id = :id")
     void setCoverUri(int id, String coverUri);
 
-    // Set a book's summary by id
+    /**
+     * Setter to set a Book's summary by ID.
+     * @param id ID of the Book (int)
+     * @param summary Summary of the Book (String)
+     */
     @Query("UPDATE book SET summary = :summary WHERE id =:id")
     void setSummary(int id, String summary);
 
-    // Set a book's notes by id
+    /**
+     * Setter to set a Book's notes by ID.
+     * @param id ID of the Book (int)
+     * @param notes Notes of the Book (String)
+     */
     @Query("UPDATE book SET notes = :notes WHERE id =:id")
     void setNotes(int id, String notes);
 
-    // Set a book's reading start date by id
+    /**
+     * Setter to set a Book's reading start date by ID.
+     * @param id ID of the Book (int)
+     * @param startDate Reading start date of the Book (String)
+     */
     @Query("UPDATE book SET start_date = :startDate WHERE id = :id")
     void setStartDate(int id, String startDate);
 
-    // Set a book's reading end date by id
+    /**
+     * Setter to set a Book's reading end date by ID.
+     * @param id ID of the Book (int)
+     * @param endDate Reading end date of the Book (String)
+     */
     @Query("UPDATE book SET end_date = :endDate WHERE id = :id")
     void setEndDate(int id, String endDate);
 
-    // Insert a book or list of books into the table
+    /**
+     * Method that inserts a Book or List of Books into the table.
+     * @param books Book or List of Books to be inserted (Book)
+     */
     @Insert
     void insertAll(Book... books);
 
-    // Insert a book into the table and return it's id
+    /**
+     * Method that inserts a Book into the table and returns its ID.
+     * @param book Inserted Book (Book)
+     * @return int of the ID of the Book
+     */
     @Insert
     long insert(Book book);
 
-    // Delete a book from the table
+    /**
+     * Method that deletes a Book from the table.
+     * @param book Deleted Book (Book)
+     */
     @Delete
     void delete(Book book);
 
-    // Remove every book from the table
+    /**
+     * Method that deletes every Book from the table.
+     */
     @Query("DELETE FROM book")
     void nukeTable();
 }

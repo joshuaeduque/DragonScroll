@@ -5,7 +5,14 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * Defines the model for a book object in the app's Room database.
+ * Book is a java class that defines the model for a Book object in the app's Room database.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 @Entity
 public class Book {
@@ -47,126 +54,144 @@ public class Book {
     private String endDate;
 
     /**
-     * @return ID of book
+     * Getter to return the ID of the Book.
+     * @return int of the ID of the Book
      */
     public int getId() {
         return id;
     }
 
     /**
-     * @param id ID of book
+     * Setter to set the ID of the Book.
+     * @param id ID of the Book (int)
      */
     public void setId(int id) {
         this.id = id;
     }
 
     /**
-     * @return title of book
+     * Getter to return the title of the Book.
+     * @return String of the title of the Book
      */
     public String getTitle() {
         return title;
     }
 
     /**
-     * @param title title of book
+     * Setter to set the title of the Book.
+     * @param title Title of the Book (String)
      */
     public void setTitle(String title) {
         this.title = title;
     }
 
     /**
-     * @return author of book
+     * Getter to return the author of the Book.
+     * @return String of the author of the Book
      */
     public String getAuthor() {
         return author;
     }
 
     /**
-     * @param author author of book
+     * Setter to set the author of the Book.
+     * @param author Author of the Book (String)
      */
     public void setAuthor(String author) {
         this.author = author;
     }
 
     /**
-     * @return rating of book
+     * Getter to return the rating of the Book.
+     * @return int of the rating of book
      */
     public int getRating() {
         return rating;
     }
 
     /**
-     * @param rating rating of book
+     * Setter to set the rating of the Book.
+     * @param rating Rating of the Book (int)
      */
     public void setRating(int rating) {
         this.rating = rating;
     }
 
     /**
-     * @return cover URI string of book
+     * Getter to return the cover URI of the Book.
+     * @return String of the cover URI of the Book
      */
     public String getCoverUri() {
         return coverUri;
     }
 
     /**
-     * @param coverUri cover URI string of book
+     * Setter to set the cover URI of the Book.
+     * @param coverUri Cover URI of the Book (String)
      */
     public void setCoverUri(String coverUri) {
         this.coverUri = coverUri;
     }
 
     /**
-     * @return summary of book
+     * Getter to return the summary of the Book.
+     * @return String of the summary of the Book
      */
     public String getSummary() {
         return summary;
     }
 
     /**
-     * @param summary summary of book
+     * Setter to set the summary of the Book.
+     * @param summary Summary of the Book (String)
      */
     public void setSummary(String summary) {
         this.summary = summary;
     }
 
     /**
-     * @return notes on book
+     * Getter to return the notes of the Book.
+     * @return String of the notes of the Book
      */
     public String getNotes() {
         return notes;
     }
 
     /**
-     * @param notes notes on book
+     * Setter to set the notes of the Book.
+     * @param notes Notes of the Book (String)
      */
     public void setNotes(String notes) {
         this.notes = notes;
     }
 
     /**
-     * @return reading start date of book
+     * Getter to return the reading start date of the Book.
+     * @return String of the reading start date of the Book
      */
     public String getStartDate() {
         return startDate;
     }
 
     /**
-     * @param startDate reading start date of book
+     * Setter to set the reading start date of the Book.
+     * @param startDate Reading start date of the Book (String)
      */
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
     /**
-     * @return reading end date of book
+     * Getter to return the reading end date of the Book.
+     * @return String of the reading end date of the Book.
      */
     public String getEndDate() {
         return endDate;
     }
 
     /**
-     * @param endDate reading end date of book
+     * Setter to set the reading end date of the Book.
+     * @param endDate Reading end date of the Book (String)
      */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
