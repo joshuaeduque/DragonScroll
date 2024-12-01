@@ -3,7 +3,6 @@ package com.teamoranges.dragonscroll;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +20,6 @@ import androidx.room.Room;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = "MainActivity";
 
     private AppDatabase database;
     private BookDao bookDao;
@@ -29,13 +27,70 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // Setup the view with a theme before it's created
+        configureTheme();
+
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView.
+            // I don't know why it does, but we're removing it for now.
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
+            return insets;
+        });
+
+        // Get the activity's BottomNavigationView
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+
+        // Get the activity's NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navHostFragment);
+
+        // Create an AppBarConfiguration
+        AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
+        ).build();
+
+        // Set activity's ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Configure navigation
+        if (navHostFragment != null) {
+            // Get the activity's NavController
+            NavController navController = navHostFragment.getNavController();
+            // Setup NavigationUI with our AppBarConfiguration
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
+            // Setup NavigationUI with the BottomNavigationView and NavController
+            NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
+        }
+
+        // Initialize the database.
+        // NOTE: Notice how we allow queries on the main thread. This is very bad but we have no
+        // time to scaffold out something proper. We'll use movie magic to reduce load times in
+        // the presentation.
+        database = Room.databaseBuilder(
+                getApplicationContext(), AppDatabase.class, "books-db"
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().build();
+
+        // Initialize the book database data access objects
+        bookDao = database.bookDao();
+    }
+
+    private void configureTheme() {
         // Get shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences(
-                getString(R.string.preference_file_key), MODE_PRIVATE);
+        String preferenceFileKey = getString(R.string.preference_file_key);
+        SharedPreferences sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE);
+
+        // Check if we got shared preferences successfully
         if (sharedPreferences != null) {
-            // Change theme before view is created
+            // Check shared preferences for current theme
             String themesPreferenceKey = getString(R.string.themes_preference_key);
             String theme = sharedPreferences.getString(themesPreferenceKey, null);
+
+            // Set theme if it exists in shared preferences
             if (theme != null) {
                 switch (theme) {
                     case "theme_red":
@@ -92,52 +147,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
             }
         }
-
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView.
-            // I don't know why it does, but we're removing it for now.
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
-            return insets;
-        });
-
-        // Get the BottomNavigationView
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
-
-        // Try getting NavHostFragment
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navHostFragment);
-        if (navHostFragment == null)
-            return;
-
-        // Create an AppBarConfiguration
-        AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
-        ).build();
-
-        // Set activity toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Get the NavController from the NavHostFragment
-        NavController navController = navHostFragment.getNavController();
-
-        // Setup NavigationUI with our AppBarConfiguration
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
-        // Setup NavigationUI with the BottomNavigationView and NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
-
-        // Create books database
-        // Notice how we're allowed queries on the main thread
-        // That's normally a big no-no but there's no time to scaffold
-        // something proper. Too bad!
-        database = Room.databaseBuilder(
-                getApplicationContext(), AppDatabase.class, "books-db"
-        ).allowMainThreadQueries().fallbackToDestructiveMigration().build();
-        bookDao = database.bookDao();
     }
 
     public AppDatabase getDatabase() {

@@ -98,6 +98,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         editor.putString(getString(R.string.themes_preference_key), o.toString());
         editor.commit();
 
+        // Recreate the activity to update the theme
         requireActivity().recreate();
         return true;
     }

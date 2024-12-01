@@ -29,60 +29,34 @@ import java.util.Locale;
  */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private BookDao bookDao;
-
     private int booksRead;
-
-    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private String profileName;
+    private String profileImageUri;
+    private String favoriteBook;
 
     private ImageView profileImageView;
+
+    private SharedPreferences sharedPrefs;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
     public ProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    private String profileName;
-    private SharedPreferences sharedPrefs;
-    private String profileImageUri;
-    private String favoriteBook;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // Get book DAO
-        bookDao = ((MainActivity) requireActivity()).getBookDao();
+        BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
+
         // Get books read
         booksRead = bookDao.getCount();
 
@@ -92,16 +66,18 @@ public class ProfileFragment extends Fragment {
                 Context.MODE_PRIVATE
         );
 
-        // Get profile name from SharedPreferences or default
+        // Get profile name
         profileName = sharedPrefs.getString(
                 getString(R.string.profile_name_key),
                 getString(R.string.profile_name_default)
         );
 
+        // Get profile image
         profileImageUri = sharedPrefs.getString(
                 getString(R.string.profile_uri_key),
                 null);
 
+        // Get favorite book
         favoriteBook = sharedPrefs.getString(
                 getString(R.string.favorite_book_key),
                 null);
@@ -168,10 +144,13 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateProfilePicture(Uri uri) {
+        // Get uri string
         String uriString = uri.toString();
 
+        // Set profile image uri
         profileImageView.setImageURI(uri);
 
+        // Update uri in SharedPreferences
         SharedPreferences.Editor editor = sharedPrefs.edit();
         editor.putString(
                 getString(R.string.profile_uri_key),
