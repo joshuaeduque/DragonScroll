@@ -20,10 +20,19 @@ import java.util.List;
  */
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
+    // List of book objects
     private final List<Book> bookList;
+    // Adapter's book click listener
     private final OnBookClickListener onBookClickListener;
+    // Adapter's book long click listener
     private final OnBookLongClickListener onBookLongClickListener;
 
+    /**
+     * Sole constructor for the {@link BookAdapter}.
+     * @param bookList book list
+     * @param onBookClickListener book item click listener
+     * @param onBookLongClickListener book item long click listener
+     */
     public BookAdapter(List<Book> bookList, OnBookClickListener onBookClickListener, OnBookLongClickListener onBookLongClickListener) {
         this.bookList = bookList;
         this.onBookClickListener = onBookClickListener;
@@ -65,11 +74,17 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
         });
     }
 
+    /**
+     * @return the size of the book list
+     */
     @Override
     public int getItemCount() {
         return bookList.size();
     }
 
+    /**
+     * BookViewHolder for book items in the adapter.
+     */
     public static class BookViewHolder extends RecyclerView.ViewHolder {
         private final TextView title, author;
         private final ImageView cover;
