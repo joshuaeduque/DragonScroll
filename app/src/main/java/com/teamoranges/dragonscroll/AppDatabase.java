@@ -6,8 +6,7 @@ import androidx.room.RoomDatabase;
 import com.teamoranges.dragonscroll.models.Book;
 
 /**
- * This class extends Android's Room database and gives access to the app's
- * book direct access object.
+ * Room database that exposes a {@link BookDao} to read and write {@link Book} data.
  */
 @Database(entities = {Book.class}, version = 6)
 public abstract class AppDatabase extends RoomDatabase {

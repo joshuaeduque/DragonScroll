@@ -5,7 +5,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 /**
- * This class defines the model for a book object in the app's database.
+ * Defines the model for a book object in the app's Room database.
  */
 @Entity
 public class Book {
