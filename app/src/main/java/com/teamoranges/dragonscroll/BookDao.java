@@ -9,6 +9,10 @@ import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
 
+/**
+ * BookDao is a direct access object for Android's Room database.
+ * It defines methods that translate to SQLite queries when executed.
+ */
 @Dao
 public interface BookDao {
     @Query("SELECT * FROM book")

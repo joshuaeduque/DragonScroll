@@ -23,9 +23,9 @@ import android.widget.TextView;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * ProfileFragment is the view the user sees when they click the profile item in the
+ * bottom navigation bar. It displays an editable profile picture, name, and the number of books
+ * a user has read.
  */
 public class ProfileFragment extends Fragment {
 

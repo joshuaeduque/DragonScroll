@@ -4,6 +4,9 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * This class defines the model for a book object in the app's database.
+ */
 @Entity
 public class Book {
 

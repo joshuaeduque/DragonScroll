@@ -30,6 +30,10 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * BookFragment represents the view a user sees when they click an entry in the book list.
+ * It allows them to view and edit the book's title, author, etc.
+ */
 public class BookFragment extends Fragment {
 
     private static final String BOOK_ID_KEY = "bookId";

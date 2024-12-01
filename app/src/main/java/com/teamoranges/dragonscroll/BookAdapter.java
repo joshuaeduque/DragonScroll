@@ -14,6 +14,10 @@ import com.teamoranges.dragonscroll.models.Book;
 
 import java.util.List;
 
+/**
+ * This class extends a RecyclerView Adapter. It's used to represent Book objects in a
+ * RecyclerView that can be clicked and long clicked.
+ */
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
     private final List<Book> bookList;
