@@ -23,9 +23,16 @@ import android.widget.TextView;
 import java.util.Locale;
 
 /**
- * ProfileFragment is the view the user sees when they click the profile item in the
+ * ProfileFragment is a java class that represents the view the user sees when they click the profile item in the
  * bottom navigation bar. It displays an editable profile picture, name, and the number of books
  * a user has read.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 public class ProfileFragment extends Fragment {
 
@@ -39,10 +46,17 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences sharedPrefs;
     private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
 
+    /**
+     * Constructor for the ProfileFragment
+     */
     public ProfileFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Method that starts a new instance of the ProfileFragment
+     * @return ProfileFragment with populated data
+     */
     public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -50,6 +64,11 @@ public class ProfileFragment extends Fragment {
         return fragment;
     }
 
+    /**
+     * Method that runs when the Profile Fragment is first created.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +127,17 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
+    /**
+     * Method that runs when a new view is created.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return View that is created.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -143,6 +173,10 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Method that runs when the Profile ImageView is clicked.
+     * @param view Current view (view)
+     */
     private void onProfileImageViewClicked(View view) {
         // Launch the photo picker and let the user choose only images.
         pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -150,6 +184,10 @@ public class ProfileFragment extends Fragment {
                 .build());
     }
 
+    /**
+     * Method that runs the the Name TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onNameTextViewClicked(View view) {
         Context context = requireContext();
 
@@ -195,9 +233,8 @@ public class ProfileFragment extends Fragment {
     }
 
     /**
-     * Set the user's profile picture URI
-     *
-     * @param uri profile picture URI string
+     * Method that updates the user's profile picture URI
+     * @param uri profile picture URI (Uri)
      */
     private void updateProfilePicture(Uri uri) {
         // Get uri string

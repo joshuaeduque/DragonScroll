@@ -15,8 +15,15 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} used to display {@link Book} data.
+ * BookAdapter is a java class that extends {@link RecyclerView.Adapter} used to display {@link Book} data.
  * It supports clicks and long clicks on items.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder> {
 
@@ -28,17 +35,23 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     private final OnBookLongClickListener onBookLongClickListener;
 
     /**
-     * Sole constructor for the {@link BookAdapter}.
-     * @param bookList book list
-     * @param onBookClickListener book item click listener
-     * @param onBookLongClickListener book item long click listener
+     * Constructor to initialize the {@link BookAdapter} object.
+     * @param bookList List of Books (List of type Book)
+     * @param onBookClickListener Book item click listener (OnBookClickListener)
+     * @param onBookLongClickListener Book item long click listener (OnBookLongClickListener)
      */
     public BookAdapter(List<Book> bookList, OnBookClickListener onBookClickListener, OnBookLongClickListener onBookLongClickListener) {
         this.bookList = bookList;
         this.onBookClickListener = onBookClickListener;
         this.onBookLongClickListener = onBookLongClickListener;
     }
-
+    /**
+     * Method that sets up a new BookViewHolder.
+     * @param parent The ViewGroup into which the new View will be added after it is bound to
+     *               an adapter position.
+     * @param viewType The view type of the new View.
+     * @return New BookViewHolder
+     */
     @NonNull
     @Override
     public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -48,7 +61,12 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
 
         return new BookViewHolder(view);
     }
-
+    /**
+     * Method that populates a Book object into a BookViewHolder
+     * @param holder The ViewHolder which should be updated to represent the contents of the
+     *        item at the given position in the data set.
+     * @param position The position of the item within the adapter's data set.
+     */
     @Override
     public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
         // Get book at position
@@ -75,7 +93,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     }
 
     /**
-     * @return the size of the book list
+     * Getter to return the size of the bookList.
+     * @return int of the size of the bookList
      */
     @Override
     public int getItemCount() {
@@ -83,12 +102,16 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.BookViewHolder
     }
 
     /**
-     * BookViewHolder for book items in the adapter.
+     * BookViewHolder is a java class for book items in the adapter.
      */
     public static class BookViewHolder extends RecyclerView.ViewHolder {
         private final TextView title, author;
         private final ImageView cover;
 
+        /**
+         * Constructor to initialize the BookViewHolder object.
+         * @param itemView Interface components for the BookViewHolder (View)
+         */
         public BookViewHolder(@NonNull View itemView) {
             super(itemView);
 

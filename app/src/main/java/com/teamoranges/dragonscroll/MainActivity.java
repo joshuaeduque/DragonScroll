@@ -20,14 +20,27 @@ import androidx.room.Room;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 /**
- * The sole activity of the app. It configures things like the app's theme,
+ * MainActivity is a java class for the sole activity of the app. It configures things like the app's theme,
  * {@link BottomNavigationView}, and {@link AppDatabase}.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 public class MainActivity extends AppCompatActivity {
 
     private AppDatabase database;
     private BookDao bookDao;
 
+    /**
+     * Method that runs when the app is started.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -83,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
         bookDao = database.bookDao();
     }
 
+    /**
+     * Method that configures the settings a user has inputted for the app
+     */
     private void configureTheme() {
         // Get shared preferences
         String preferenceFileKey = getString(R.string.preference_file_key);
@@ -153,10 +169,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Getter to return the database of the app.
+     * @return database of the app (AppDatabase)
+     */
     public AppDatabase getDatabase() {
         return database;
     }
 
+    /**
+     * Getter to return a Book's DAO.
+     * @return Book's DAO (BookDao)
+     */
     public BookDao getBookDao() {
         return bookDao;
     }

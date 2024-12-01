@@ -10,7 +10,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +22,16 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * HomeFragment represents the view a user sees when the select the home item in the
+ * HomeFragment is a java class that represents the view a user sees when the select the home item in the
  * bottom navigation view. It displays a clickable list of books that navigate to their own
  * BookFragment.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 public class HomeFragment extends Fragment {
 
@@ -38,14 +44,26 @@ public class HomeFragment extends Fragment {
 
     private TextView noBooksTextView;
 
+    /**
+     * Constructor for the HomeFragment
+     */
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    public static HomeFragment newInstance(String param1, String param2) {
+    /**
+     * Method that starts a new instance of the HomeFragment.
+     * @return HomeFragment with populated data
+     */
+    public static HomeFragment newInstance() {
         return new HomeFragment();
     }
 
+    /**
+     * Method that runs when the HomeFragment is first created.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +79,17 @@ public class HomeFragment extends Fragment {
         navController = navHostFragment.getNavController();
     }
 
+    /**
+     * Method that runs when a new view is created
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return View that is created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -98,6 +127,10 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Method that runs the Floating Action Button is clicked.
+     * @param view Current view (View)
+     */
     private void onFloatingActionButtonClicked(View view) {
         // Create new book
         Book book = new Book();
@@ -111,6 +144,11 @@ public class HomeFragment extends Fragment {
         updateNoBooksTextViewVisibility();
     }
 
+    /**
+     * Method that runs when a Book is clicked.
+     * @param book Book that is clicked (Book)
+     * @param position Position of the Book in the table (int)
+     */
     private void onBookClick(Book book, int position) {
         // Create a bundle for the fragment we're about to navigate to
         Bundle bundle = new Bundle();
@@ -120,6 +158,12 @@ public class HomeFragment extends Fragment {
         navController.navigate(R.id.navigation_book, bundle);
     }
 
+    /**
+     * Method that runs when a Book is long clicked.
+     * @param book Book that is long clicked (Book)
+     * @param position Position of the Book in the table (int)
+     * @return boolean to represent Book being deleted
+     */
     private boolean onBookLongClick(Book book, int position) {
         // Create delete AlertDialog
         AlertDialog.Builder alert = new AlertDialog.Builder(context)
@@ -142,12 +186,19 @@ public class HomeFragment extends Fragment {
         return false;
     }
 
+    /**
+     * Method that determines if the Book table is empty or not and displays the appropriate TextView.
+     */
     private void updateNoBooksTextViewVisibility() {
         // Set the visibility of the "No books" TextView depending on whether the
         // book list is empty.
         noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
+    /**
+     * Method to add a Book to the table.
+     * @param book Book to be added (Book)
+     */
     private void addBook(Book book) {
         // NOTE: There's some serious mishandling going on in regards to the book list and
         // recycler view. I don't have time to fix it right now. It's good enough for the
@@ -164,6 +215,11 @@ public class HomeFragment extends Fragment {
         bookAdapter.notifyItemInserted(bookList.size() - 1);
     }
 
+    /**
+     * Method that deletes a Book from the table.
+     * @param book Book to be deleted (Book)
+     * @param position Position of the Book in the table (int)
+     */
     private void deleteBook(Book book, int position) {
         // Delete book from database
         bookDao.delete(book);
@@ -176,6 +232,10 @@ public class HomeFragment extends Fragment {
         bookAdapter.notifyItemRangeChanged(position, bookList.size());
     }
 
+    /**
+     * Method that generates a random title for a newly created Book.
+     * @return String of the title of the Book.
+     */
     private String getRandomTitle() {
         // Create a list of random adjectives and nouns
         // This should really be a static array.
