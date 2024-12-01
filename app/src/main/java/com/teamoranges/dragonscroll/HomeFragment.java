@@ -29,8 +29,8 @@ public class HomeFragment extends Fragment {
     private List<Book> bookList;
     private BookDao bookDao;
     private BookAdapter bookAdapter;
-
     private NavController navController;
+    
     private TextView noBooksTextView;
 
     public HomeFragment() {
@@ -107,11 +107,11 @@ public class HomeFragment extends Fragment {
     }
 
     private void onBookClick(Book book, int position) {
+        // Create a bundle for the fragment we're about to navigate to
         Bundle bundle = new Bundle();
-
+        // Put the book ID in the bundle
         bundle.putInt("bookId", book.getId());
-
-        // Navigate to BookFragment with book data
+        // Navigate to BookFragment with the bundle
         navController.navigate(R.id.navigation_book, bundle);
     }
 
@@ -138,6 +138,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateNoBooksTextViewVisibility() {
+        // Set the visibility of the "No books" TextView depending on whether the
+        // book list is empty.
         noBooksTextView.setVisibility(bookList.isEmpty() ? View.VISIBLE : View.GONE);
     }
 
@@ -170,11 +172,13 @@ public class HomeFragment extends Fragment {
     }
 
     private String getRandomTitle() {
+        // Create a list of random adjectives and nouns
+        // This should really be a static array.
         String[] adjectives = {"Lost", "Hidden", "Secret", "Dark", "Silent", "Ancient", "Haunted"};
         String[] nouns = {"Kingdom", "Garden", "Dreams", "Echoes", "Stars", "Journey", "Legacy"};
 
+        // Return a string with random adjective and noun indices
         Random random = new Random();
-
         return String.format(
                 "%s %s",
                 adjectives[random.nextInt(adjectives.length)],
