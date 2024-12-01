@@ -143,21 +143,6 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void updateProfilePicture(Uri uri) {
-        // Get uri string
-        String uriString = uri.toString();
-
-        // Set profile image uri
-        profileImageView.setImageURI(uri);
-
-        // Update uri in SharedPreferences
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString(
-                getString(R.string.profile_uri_key),
-                uriString);
-        editor.apply();
-    }
-
     private void onProfileImageViewClicked(View view) {
         // Launch the photo picker and let the user choose only images.
         pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -207,5 +192,25 @@ public class ProfileFragment extends Fragment {
 
         // Show the AlertDialog
         alert.show();
+    }
+
+    /**
+     * Set the user's profile picture URI
+     *
+     * @param uri profile picture URI string
+     */
+    private void updateProfilePicture(Uri uri) {
+        // Get uri string
+        String uriString = uri.toString();
+
+        // Set profile image uri
+        profileImageView.setImageURI(uri);
+
+        // Update uri in SharedPreferences
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(
+                getString(R.string.profile_uri_key),
+                uriString);
+        editor.apply();
     }
 }
