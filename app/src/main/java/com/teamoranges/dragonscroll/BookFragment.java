@@ -36,15 +36,16 @@ public class BookFragment extends Fragment {
 
     private int bookIdParam;
 
-    private BookDao bookDao;
     private Book book;
-    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
-    private ImageView coverImageView;
 
+    private BookDao bookDao;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    private ImageView coverImageView;
     private EditText summaryEditText;
     private EditText notesEditText;
 
-    private SharedPreferences sharedPrefs;
+    private SharedPreferences sharedPreferences;
 
     public BookFragment() {
         // Required empty public constructor
@@ -64,16 +65,18 @@ public class BookFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
 
-        sharedPrefs = requireContext().getSharedPreferences(
+        // Get SharedPreferences
+        sharedPreferences = requireContext().getSharedPreferences(
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE
         );
 
-        // Get BookDAO from MainActivity
+        // Get BookDao from MainActivity
         bookDao = ((MainActivity) requireActivity()).getBookDao();
 
         // Get Book by ID from database
@@ -84,12 +87,17 @@ public class BookFragment extends Fragment {
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
+
+                    // Check if a uri was selected from the picker
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
+
+                        // If the cover ImageView is null, don't do anything.
                         if (coverImageView == null) {
                             return;
                         }
 
+                        // Configure uri permission since we store them persistently in the database.
                         try {
                             // Do some nonsense with permissions
                             Context context = requireContext();
@@ -113,87 +121,106 @@ public class BookFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
 
-        // Setup cover ImageView
+        // Get cover ImageView
         coverImageView = view.findViewById(R.id.profileImageView);
         if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
+            // Set cover uri
             String uri = book.getCoverUri();
             coverImageView.setImageURI(Uri.parse(uri));
         }
+        // Set cover on click listener
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Get summary EditText
         summaryEditText = view.findViewById(R.id.summaryEditText);
         if (book.getSummary() != null && !book.getSummary().isEmpty()) {
+            // Set summary text
             summaryEditText.setText(book.getSummary());
         }
 
         // Get notes EditText
         notesEditText = view.findViewById(R.id.notesEditText);
         if (book.getNotes() != null && !book.getNotes().isEmpty()) {
+            // Set notes text
             notesEditText.setText(book.getNotes());
         }
 
-        // Setup title TextView
+        // Get title TextView
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         if (book.getTitle() != null && !book.getTitle().isEmpty()) {
+            // Set title text
             titleTextView.setText(book.getTitle());
         }
+        // Set title on click listener
         titleTextView.setOnClickListener(this::onTitleTextViewClicked);
 
-        // Setup author TextView
+        // Get author TextView
         TextView authorTextView = view.findViewById(R.id.authorTextView);
-        authorTextView.setText(book.getAuthor());
         if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            // Set author text
             authorTextView.setText(book.getAuthor());
         }
+        // Set author on click listener
         authorTextView.setOnClickListener(this::onAuthorTextViewClicked);
 
-        // Setup rating TextView
+        // Get rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
-        String ratingText = String.format(Locale.getDefault(), "Rating: %d/5", book.getRating());
-        ratingTextView.setText(ratingText);
+        // Set rating text
+        ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", book.getRating()));
+        // Set rating on click listener
         ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
-        // Setup save summary Button
+        // Get save summary Button
         Button saveSummaryButton = view.findViewById(R.id.saveSummaryButton);
+        // Set save summary on click listener
         saveSummaryButton.setOnClickListener(this::onSaveSummaryButtonClicked);
 
-        // Setup save notes Button
+        // Get save notes Button
         Button saveNotesButton = view.findViewById(R.id.saveNotesButton);
+        // Set save notes on click listener
         saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
 
-        // Setup start date TextView
+        // Get start date TextView
         TextView startDateTextView = view.findViewById(R.id.startDateTextView);
         if (book.getStartDate() != null && !book.getStartDate().isEmpty()) {
-            String startDate = String.format(Locale.getDefault(), "Start Date: %s", book.getStartDate());
-            startDateTextView.setText(startDate);
+            // Set start date text
+            startDateTextView.setText(String.format(Locale.getDefault(), "Start Date: %s", book.getStartDate()));
         }
+        // Set start date on click listener
         startDateTextView.setOnClickListener(this::onStartTextViewClicked);
 
-        // Setup end date TextView
+        // Get end date TextView
         TextView endDateTextView = view.findViewById(R.id.endDateTextView);
         if (book.getEndDate() != null && !book.getEndDate().isEmpty()) {
-            String endDate = String.format(Locale.getDefault(), "End Date: %s", book.getEndDate());
-            endDateTextView.setText(endDate);
+            // Set end date text
+            endDateTextView.setText(String.format(Locale.getDefault(), "End Date: %s", book.getEndDate()));
         }
+        // Set end date on click listener
         endDateTextView.setOnClickListener(this::onEndTextViewClicked);
 
-        // Setup favorites button
+        // Get favorite button
         Button favoriteButton = view.findViewById(R.id.favoritesButton);
+        // Set favorite on click listener
         favoriteButton.setOnClickListener(this::onFavoriteButtonClicked);
 
         return view;
     }
 
     private void onFavoriteButtonClicked(View view) {
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString(getString(R.string.favorite_book_key), book.getTitle());
+        // Get the key we use to store the favorite book in SharedPreferences
+        String favoriteBookKey = getString(R.string.favorite_book_key);
+
+        // Store the favorite boo title in SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(favoriteBookKey, book.getTitle());
         editor.apply();
 
+        // Display a toast stating that we saved the favorite book
         Toast.makeText(requireContext(), "Set as favorite book", Toast.LENGTH_SHORT).show();
     }
 
     private void onEndTextViewClicked(View view) {
+        // Get the calendar year, month, and day
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -202,15 +229,17 @@ public class BookFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                // year month day
+                // Set the end date year, month, and day
                 updateEndDate(view, i, i1, i2);
             }
         }, year, month, day);
 
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
 
     private void onStartTextViewClicked(View view) {
+        // Get the calendar year, month, and day
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -219,11 +248,12 @@ public class BookFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                // year month day
+                // Set the end date year, month, and day
                 updateStartDate(view, i, i1, i2);
             }
         }, year, month, day);
 
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
 
@@ -394,6 +424,7 @@ public class BookFragment extends Fragment {
     }
 
     private void updateBookCover(View view, Uri uri) {
+        // Get the uri string
         String uriString = uri.toString();
 
         // Update uri in database
@@ -406,6 +437,7 @@ public class BookFragment extends Fragment {
     }
 
     private void updateStartDate(View view, int year, int month, int day) {
+        // Get the date string
         String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
         // Update date in database
@@ -417,6 +449,7 @@ public class BookFragment extends Fragment {
     }
 
     private void updateEndDate(View view, int year, int month, int day) {
+        // Get the date string
         String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
         // Update date in database
@@ -429,6 +462,8 @@ public class BookFragment extends Fragment {
 
     // This is so hacky but it works for now
     private int tryParseInt(String number) {
+        // Try parsing an integer from a string.
+        // If it fails, just return -1 as a default.
         try {
             return Integer.parseInt(number);
         } catch (Exception exception) {
