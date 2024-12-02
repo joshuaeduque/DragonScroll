@@ -23,66 +23,59 @@ import android.widget.TextView;
 import java.util.Locale;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProfileFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * ProfileFragment is a java class that represents the view the user sees when they click the profile item in the
+ * bottom navigation bar. It displays an editable profile picture, name, and the number of books
+ * a user has read.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
  */
 public class ProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    private BookDao bookDao;
-
     private int booksRead;
-
-    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private String profileName;
+    private String profileImageUri;
+    private String favoriteBook;
 
     private ImageView profileImageView;
 
+    private SharedPreferences sharedPrefs;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+
+    /**
+     * Constructor for the ProfileFragment
+     */
     public ProfileFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProfileFragment.
+     * Method that starts a new instance of the ProfileFragment
+     * @return ProfileFragment with populated data
      */
-    // TODO: Rename and change types and number of parameters
-    public static ProfileFragment newInstance(String param1, String param2) {
+    public static ProfileFragment newInstance() {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    private String profileName;
-    private SharedPreferences sharedPrefs;
-    private String profileImageUri;
-    private String favoriteBook;
-
+    /**
+     * Method that runs when the Profile Fragment is first created.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         // Get book DAO
-        bookDao = ((MainActivity) requireActivity()).getBookDao();
+        BookDao bookDao = ((MainActivity) requireActivity()).getBookDao();
+
         // Get books read
         booksRead = bookDao.getCount();
 
@@ -92,16 +85,18 @@ public class ProfileFragment extends Fragment {
                 Context.MODE_PRIVATE
         );
 
-        // Get profile name from SharedPreferences or default
+        // Get profile name
         profileName = sharedPrefs.getString(
                 getString(R.string.profile_name_key),
                 getString(R.string.profile_name_default)
         );
 
+        // Get profile image
         profileImageUri = sharedPrefs.getString(
                 getString(R.string.profile_uri_key),
                 null);
 
+        // Get favorite book
         favoriteBook = sharedPrefs.getString(
                 getString(R.string.favorite_book_key),
                 null);
@@ -132,6 +127,17 @@ public class ProfileFragment extends Fragment {
                 });
     }
 
+    /**
+     * Method that runs when a new view is created.
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return View that is created.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -167,18 +173,10 @@ public class ProfileFragment extends Fragment {
         return view;
     }
 
-    private void updateProfilePicture(Uri uri) {
-        String uriString = uri.toString();
-
-        profileImageView.setImageURI(uri);
-
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString(
-                getString(R.string.profile_uri_key),
-                uriString);
-        editor.apply();
-    }
-
+    /**
+     * Method that runs when the Profile ImageView is clicked.
+     * @param view Current view (view)
+     */
     private void onProfileImageViewClicked(View view) {
         // Launch the photo picker and let the user choose only images.
         pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -186,6 +184,10 @@ public class ProfileFragment extends Fragment {
                 .build());
     }
 
+    /**
+     * Method that runs the the Name TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onNameTextViewClicked(View view) {
         Context context = requireContext();
 
@@ -228,5 +230,24 @@ public class ProfileFragment extends Fragment {
 
         // Show the AlertDialog
         alert.show();
+    }
+
+    /**
+     * Method that updates the user's profile picture URI
+     * @param uri profile picture URI (Uri)
+     */
+    private void updateProfilePicture(Uri uri) {
+        // Get uri string
+        String uriString = uri.toString();
+
+        // Set profile image uri
+        profileImageView.setImageURI(uri);
+
+        // Update uri in SharedPreferences
+        SharedPreferences.Editor editor = sharedPrefs.edit();
+        editor.putString(
+                getString(R.string.profile_uri_key),
+                uriString);
+        editor.apply();
     }
 }

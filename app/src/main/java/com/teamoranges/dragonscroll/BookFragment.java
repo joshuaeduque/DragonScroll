@@ -30,50 +30,80 @@ import com.teamoranges.dragonscroll.models.Book;
 import java.util.Calendar;
 import java.util.Locale;
 
+/**
+ * BookFragment is a java class that represents the view a user sees when they click an entry in the book list.
+ * It allows them to view and edit the book's title, author, etc.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
+ */
 public class BookFragment extends Fragment {
 
+    // Key string used to pass in a book ID
     private static final String BOOK_ID_KEY = "bookId";
 
+    // Book ID passed to the book fragment
     private int bookIdParam;
 
-    private BookDao bookDao;
+    // Book retrieved from database by ID
     private Book book;
-    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
-    private ImageView coverImageView;
 
+    private BookDao bookDao;
+    private ActivityResultLauncher<PickVisualMediaRequest> pickMedia;
+    private SharedPreferences sharedPreferences;
+
+    private ImageView coverImageView;
     private EditText summaryEditText;
     private EditText notesEditText;
 
-    private SharedPreferences sharedPrefs;
-
+    /**
+     * Constructor for the BookFragment
+     */
     public BookFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Method that starts a new instance of the BookFragment.
+     * @param bookId Id of the Book (int)
+     * @return BookFragment with populated Book data
+     */
     public static BookFragment newInstance(int bookId) {
         BookFragment fragment = new BookFragment();
 
+        // Get arguments from bundle
         Bundle args = new Bundle();
         args.putInt(BOOK_ID_KEY, bookId);
-
         fragment.setArguments(args);
 
         return fragment;
     }
 
+    /**
+     * Method that runs when the BookFragment is first created.
+     * @param savedInstanceState If the fragment is being re-created from
+     * a previous saved state, this is the state.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
+            // Get book id from fragment bundle
             bookIdParam = getArguments().getInt(BOOK_ID_KEY);
         }
 
-        sharedPrefs = requireContext().getSharedPreferences(
+        // Get SharedPreferences
+        sharedPreferences = requireContext().getSharedPreferences(
                 getString(R.string.preference_file_key),
                 Context.MODE_PRIVATE
         );
 
-        // Get BookDAO from MainActivity
+        // Get BookDao from MainActivity
         bookDao = ((MainActivity) requireActivity()).getBookDao();
 
         // Get Book by ID from database
@@ -84,12 +114,17 @@ public class BookFragment extends Fragment {
                 registerForActivityResult(new ActivityResultContracts.PickVisualMedia(), uri -> {
                     // Callback is invoked after the user selects a media item or closes the
                     // photo picker.
+
+                    // Check if a uri was selected from the picker
                     if (uri != null) {
                         Log.d("PhotoPicker", "Selected URI: " + uri);
+
+                        // If the cover ImageView is null, don't do anything.
                         if (coverImageView == null) {
                             return;
                         }
 
+                        // Configure uri permission since we store them persistently in the database.
                         try {
                             // Do some nonsense with permissions
                             Context context = requireContext();
@@ -107,93 +142,131 @@ public class BookFragment extends Fragment {
                 });
     }
 
+    /**
+     * Method that runs when a new view is created
+     * @param inflater The LayoutInflater object that can be used to inflate
+     * any views in the fragment,
+     * @param container If non-null, this is the parent view that the fragment's
+     * UI should be attached to.  The fragment should not add the view itself,
+     * but this can be used to generate the LayoutParams of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed
+     * from a previous saved state as given here.
+     * @return View that is created
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_book, container, false);
 
-        // Setup cover ImageView
+        // Get cover ImageView
         coverImageView = view.findViewById(R.id.profileImageView);
         if (book.getCoverUri() != null && !book.getCoverUri().isEmpty()) {
+            // Set cover uri
             String uri = book.getCoverUri();
             coverImageView.setImageURI(Uri.parse(uri));
         }
+        // Set cover on click listener
         coverImageView.setOnClickListener(this::onCoverImageViewClicked);
 
         // Get summary EditText
         summaryEditText = view.findViewById(R.id.summaryEditText);
         if (book.getSummary() != null && !book.getSummary().isEmpty()) {
+            // Set summary text
             summaryEditText.setText(book.getSummary());
         }
 
         // Get notes EditText
         notesEditText = view.findViewById(R.id.notesEditText);
         if (book.getNotes() != null && !book.getNotes().isEmpty()) {
+            // Set notes text
             notesEditText.setText(book.getNotes());
         }
 
-        // Setup title TextView
+        // Get title TextView
         TextView titleTextView = view.findViewById(R.id.titleTextView);
         if (book.getTitle() != null && !book.getTitle().isEmpty()) {
+            // Set title text
             titleTextView.setText(book.getTitle());
         }
+        // Set title on click listener
         titleTextView.setOnClickListener(this::onTitleTextViewClicked);
 
-        // Setup author TextView
+        // Get author TextView
         TextView authorTextView = view.findViewById(R.id.authorTextView);
-        authorTextView.setText(book.getAuthor());
         if (book.getAuthor() != null && !book.getAuthor().isEmpty()) {
+            // Set author text
             authorTextView.setText(book.getAuthor());
         }
+        // Set author on click listener
         authorTextView.setOnClickListener(this::onAuthorTextViewClicked);
 
-        // Setup rating TextView
+        // Get rating TextView
         TextView ratingTextView = view.findViewById(R.id.ratingTextView);
-        String ratingText = String.format(Locale.getDefault(), "Rating: %d/5", book.getRating());
-        ratingTextView.setText(ratingText);
+        // Set rating text
+        ratingTextView.setText(String.format(Locale.getDefault(), "Rating: %d/5", book.getRating()));
+        // Set rating on click listener
         ratingTextView.setOnClickListener(this::onRatingTextViewClicked);
 
-        // Setup save summary Button
+        // Get save summary Button
         Button saveSummaryButton = view.findViewById(R.id.saveSummaryButton);
+        // Set save summary on click listener
         saveSummaryButton.setOnClickListener(this::onSaveSummaryButtonClicked);
 
-        // Setup save notes Button
+        // Get save notes Button
         Button saveNotesButton = view.findViewById(R.id.saveNotesButton);
+        // Set save notes on click listener
         saveNotesButton.setOnClickListener(this::onSaveNotesButtonClicked);
 
-        // Setup start date TextView
+        // Get start date TextView
         TextView startDateTextView = view.findViewById(R.id.startDateTextView);
         if (book.getStartDate() != null && !book.getStartDate().isEmpty()) {
-            String startDate = String.format(Locale.getDefault(), "Start Date: %s", book.getStartDate());
-            startDateTextView.setText(startDate);
+            // Set start date text
+            startDateTextView.setText(String.format(Locale.getDefault(), "Start Date: %s", book.getStartDate()));
         }
+        // Set start date on click listener
         startDateTextView.setOnClickListener(this::onStartTextViewClicked);
 
-        // Setup end date TextView
+        // Get end date TextView
         TextView endDateTextView = view.findViewById(R.id.endDateTextView);
         if (book.getEndDate() != null && !book.getEndDate().isEmpty()) {
-            String endDate = String.format(Locale.getDefault(), "End Date: %s", book.getEndDate());
-            endDateTextView.setText(endDate);
+            // Set end date text
+            endDateTextView.setText(String.format(Locale.getDefault(), "End Date: %s", book.getEndDate()));
         }
+        // Set end date on click listener
         endDateTextView.setOnClickListener(this::onEndTextViewClicked);
 
-        // Setup favorites button
+        // Get favorite button
         Button favoriteButton = view.findViewById(R.id.favoritesButton);
+        // Set favorite on click listener
         favoriteButton.setOnClickListener(this::onFavoriteButtonClicked);
 
         return view;
     }
 
+    /**
+     * Method that runs when the Favorite Button is clicked.
+     * @param view Current view (View)
+     */
     private void onFavoriteButtonClicked(View view) {
-        SharedPreferences.Editor editor = sharedPrefs.edit();
-        editor.putString(getString(R.string.favorite_book_key), book.getTitle());
+        // Get the key we use to store the favorite book in SharedPreferences
+        String favoriteBookKey = getString(R.string.favorite_book_key);
+
+        // Store the favorite boo title in SharedPreferences
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(favoriteBookKey, book.getTitle());
         editor.apply();
 
+        // Display a toast stating that we saved the favorite book
         Toast.makeText(requireContext(), "Set as favorite book", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Method that runs when the End TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onEndTextViewClicked(View view) {
+        // Get the calendar year, month, and day
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -202,15 +275,21 @@ public class BookFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                // year month day
+                // Set the end date year, month, and day
                 updateEndDate(view, i, i1, i2);
             }
         }, year, month, day);
 
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
 
+    /**
+     * Method that runs when the Start TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onStartTextViewClicked(View view) {
+        // Get the calendar year, month, and day
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -219,14 +298,19 @@ public class BookFragment extends Fragment {
         DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                // year month day
+                // Set the end date year, month, and day
                 updateStartDate(view, i, i1, i2);
             }
         }, year, month, day);
 
+        // Show the DatePickerDialog
         datePickerDialog.show();
     }
 
+    /**
+     * Method that runs when the Save Summary Button is clicked.
+     * @param view Current view (View)
+     */
     private void onSaveSummaryButtonClicked(View view) {
         // Get summary text from EditText
         String text = summaryEditText.getText().toString();
@@ -236,6 +320,10 @@ public class BookFragment extends Fragment {
         Toast.makeText(getContext(), "Summary saved", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Method that runs when the Save Notes Button is clicked.
+     * @param view Current view (View)
+     */
     private void onSaveNotesButtonClicked(View view) {
         // Get notes text from EditText
         String text = notesEditText.getText().toString();
@@ -245,6 +333,10 @@ public class BookFragment extends Fragment {
         Toast.makeText(getContext(), "Notes saved", Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * Method that runs when the Cover ImageView is clicked.
+     * @param view Current view (View)
+     */
     private void onCoverImageViewClicked(View view) {
         // Launch the photo picker and let the user choose only images.
         pickMedia.launch(new PickVisualMediaRequest.Builder()
@@ -252,6 +344,10 @@ public class BookFragment extends Fragment {
                 .build());
     }
 
+    /**
+     * Method that runs when the Rating TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onRatingTextViewClicked(View view) {
         // Get Context
         Context context = this.getContext();
@@ -295,6 +391,10 @@ public class BookFragment extends Fragment {
         alertDialog.show();
     }
 
+    /**
+     * Method that runs when the Author TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onAuthorTextViewClicked(View view) {
         // Get Context
         Context context = this.getContext();
@@ -329,6 +429,10 @@ public class BookFragment extends Fragment {
         alertDialog.show();
     }
 
+    /**
+     * Method that runs when the Title TextView is clicked.
+     * @param view Current view (View)
+     */
     private void onTitleTextViewClicked(View view) {
         // Get Context
         Context context = this.getContext();
@@ -363,6 +467,11 @@ public class BookFragment extends Fragment {
         alertDialog.show();
     }
 
+    /**
+     * Method to update a Book's rating.
+     * @param view Current view (View)
+     * @param rating New rating of the Book (int)
+     */
     private void updateBookRating(View view, int rating) {
         // Update rating in database
         bookDao.setRating(bookIdParam, rating);
@@ -373,6 +482,11 @@ public class BookFragment extends Fragment {
         book.setRating(rating);
     }
 
+    /**
+     * Method to update a Book's author.
+     * @param view Current view (View)
+     * @param author New author of the Book (String)
+     */
     private void updateBookAuthor(View view, String author) {
         // Update author in database
         bookDao.setAuthor(bookIdParam, author);
@@ -383,6 +497,11 @@ public class BookFragment extends Fragment {
         book.setAuthor(author);
     }
 
+    /**
+     * Method to update a Book's title.
+     * @param view Current view (View)
+     * @param title New title of the Book (String)
+     */
     private void updateBookTitle(View view, String title) {
         // Update title in database
         bookDao.setTitle(bookIdParam, title);
@@ -393,7 +512,13 @@ public class BookFragment extends Fragment {
         book.setTitle(title);
     }
 
+    /**
+     * Method to update a Book's Cover URI.
+     * @param view Current view (View)
+     * @param uri New Cover URI (Uri)
+     */
     private void updateBookCover(View view, Uri uri) {
+        // Get the uri string
         String uriString = uri.toString();
 
         // Update uri in database
@@ -405,7 +530,15 @@ public class BookFragment extends Fragment {
         book.setCoverUri(uriString);
     }
 
+    /**
+     * Method to update a Book's reading start date.
+     * @param view Current view (View)
+     * @param year New starting year (int)
+     * @param month New starting month (int)
+     * @param day New starting day (int)
+     */
     private void updateStartDate(View view, int year, int month, int day) {
+        // Get the date string
         String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
         // Update date in database
@@ -416,7 +549,15 @@ public class BookFragment extends Fragment {
         book.setStartDate(date);
     }
 
+    /**
+     * Method to update a Book's reading end date.
+     * @param view Current view (View)
+     * @param year New ending year (int)
+     * @param month New ending month (int)
+     * @param day New ending day (int)
+     */
     private void updateEndDate(View view, int year, int month, int day) {
+        // Get the date string
         String date = String.format(Locale.getDefault(), "%d/%d/%d", year, month, day);
 
         // Update date in database
@@ -427,8 +568,15 @@ public class BookFragment extends Fragment {
         book.setEndDate(date);
     }
 
+    /**
+     * Method to attempt to parse a String for ints.
+     * @param number Number to be parsed (String)
+     * @return int representation of the String or -1 for failure
+     */
     // This is so hacky but it works for now
     private int tryParseInt(String number) {
+        // Try parsing an integer from a string.
+        // If it fails, just return -1 as a default.
         try {
             return Integer.parseInt(number);
         } catch (Exception exception) {

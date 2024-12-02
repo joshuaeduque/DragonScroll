@@ -6,16 +6,33 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SeekBarPreference;
-
+/**
+ * SettingsFragment is a java class that represents the view the user sees when they click the settings item in the
+ * bottom navigation bar. It displays a number of customizable options the user can change, including:
+ * Themes, dark mode, text size, clear preferences, and nuke database.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
+ */
 public class SettingsFragment extends PreferenceFragmentCompat {
 
     private SharedPreferences sharedPreferences;
 
+    /**
+     * Method that runs when preferences are changed by the user.
+     * @param savedInstanceState If the fragment is being re-created from a previous saved state,
+     *                           this is the state.
+     * @param rootKey            If non-null, this preference fragment should be rooted at the
+     *                           {@link PreferenceScreen} with this key.
+     */
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.root_preferences, rootKey);
@@ -92,16 +109,29 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         }
     }
 
+    /**
+     * Method that runs when the Themes Preference is changed.
+     * @param preference Selected preference within the Themes Preference (Preference)
+     * @param o Selected object within the Themes Preference (Object)
+     * @return boolean that represents a successful change
+     */
     private boolean onThemesPreferenceChanged(Preference preference, Object o) {
         // Why do I have to commit the preference manually?
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.themes_preference_key), o.toString());
         editor.commit();
 
+        // Recreate the activity to update the theme
         requireActivity().recreate();
         return true;
     }
 
+    /**
+     * Method that runs when the Dark Mode Preference is changed.
+     * @param preference Selected preference within the Dark Mode Preference (Preference)
+     * @param o Selected object within the Dark Mode Preference (Object)
+     * @return
+     */
     private boolean onDarkModePreferenceChanged(Preference preference, Object o) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(getString(R.string.dark_mode_key), o.toString());
@@ -110,6 +140,10 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         requireActivity().recreate();
         return true;
     }
+
+    /**
+     * Method that resets all SharedPreferences entries to their defaults.
+     */
     private void resetPreferencesUI() {
         SeekBarPreference textSizeSlider = findPreference(getString(R.string.text_size_preference_key));
         ListPreference themeList = findPreference(getString(R.string.themes_preference_key));
