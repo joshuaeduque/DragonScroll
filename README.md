@@ -14,9 +14,9 @@ While DragonScroll supports light mode, is was developed with dark mode in mind 
 * Themes 🎨
 
 ## Screenshots
-| Home | Book | Profile | Settings |
-| ---  | ---  | ---     | ---      |
-| <img src="/screenshots/home.png" height="25%"> | <img src="/screenshots/book.png" height="25%"> | <img src="/screenshots/profile.png" height="25%"> | <img src="/screenshots/settings.png" height="25%"> |
+| Home | Book | Profile | Settings | Themes |
+| ---  | ---  | ---     | ---      | ---    |
+| <img src="/screenshots/home.png" height="25%"> | <img src="/screenshots/book.png" height="25%"> | <img src="/screenshots/profile.png" height="25%"> | <img src="/screenshots/settings.png" height="25%"> | <img src="/screenshots/themes.png" height="25%"> |
 
 ## Contributors
 [<img src="https://github.com/emig23.png" width=100px height=100px>](https://github.com/emig23)
