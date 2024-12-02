@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -101,53 +102,63 @@ public class HomeFragment extends Fragment {
     }
 
     private void showAddBookDialog() {
-        // Inflate the existing LinearLayout
-        View dialogView = getView().findViewById(R.id.alertDialogCustomView);
+        Context context = requireContext();
 
-        // Avoid IllegalStateException
-        if (dialogView.getParent() != null) {
-            ((ViewGroup) dialogView.getParent()).removeView(dialogView);
-        }
+        // Create a LinearLayout to hold the EditTexts
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(16, 16, 16, 16);
 
-        // Set the visibility of the input container to visible
-        dialogView.setVisibility(View.VISIBLE);
+        // Create EditText for book title
+        EditText titleEditText = new EditText(context);
+        titleEditText.setHint("Book Title");
+        layout.addView(titleEditText);  // Add to layout
 
-        // Get the EditText fields
-        EditText bookTitleEditText = dialogView.findViewById(R.id.dialogBookTitleText);
-        EditText bookAuthorEditText = dialogView.findViewById(R.id.dialogBookAuthorText);
+        // Create EditText for author
+        EditText authorEditText = new EditText(context);
+        authorEditText.setHint("Author");
+        layout.addView(authorEditText);  // Add to layout
 
-        // Create the AlertDialog
-        AlertDialog.Builder alert = new AlertDialog.Builder(requireContext());
-        alert.setTitle("Add Book")
-                .setView(dialogView)
-                .setPositiveButton("Add", (dialogInterface, i) -> {
-                    String title = bookTitleEditText.getText().toString().trim();
-                    String author = bookAuthorEditText.getText().toString().trim();
+        // Create AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                .setMessage("Enter book details")
+                .setView(layout);  // Set the layout as the view
 
-                    // Validate input
-                    if (title.isEmpty() || author.isEmpty()) {
-                        Toast.makeText(requireContext(), "Please fill out all fields", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+        // Set AlertDialog positive button on click listener
+        alert.setPositiveButton("Save", (dialog, button) -> {
+            // Get text from EditTexts
+            String title = titleEditText.getText().toString().trim();
+            String author = authorEditText.getText().toString().trim();
 
-                    // Create a new Book object
-                    Book book = new Book();
-                    book.setTitle(title);
-                    book.setAuthor(author);
+            // Validate inputs
+            if (title.isEmpty() || author.isEmpty()) {
+                Toast.makeText(context, "Please enter both title and author", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-                    // Add the book to the database or list
-                    addBook(book);
+            // Create a new Book object
+            Book book = new Book();
+            book.setTitle(title);
+            book.setAuthor(author);
 
-                    // Notify the user
-                    Toast.makeText(requireContext(), "Book added!", Toast.LENGTH_SHORT).show();
-                })
-                .setNegativeButton("Cancel", (dialogInterface, i) -> {
-                    // Reset the visibility of the LinearLayout to GONE when the dialog is dismissed
-                    dialogView.setVisibility(View.GONE);
-                    dialogInterface.dismiss();
-                })
-                .show();
+            // Add the book to the list
+            addBook(book);
+
+            // Notify user
+            Toast.makeText(context, "Book added!", Toast.LENGTH_SHORT).show();
+        });
+
+        // Set AlertDialog negative button with empty listener
+        alert.setNegativeButton("Cancel", (dialog, button) -> {
+            // Do nothing on cancel
+        });
+
+        // Show the AlertDialog
+        alert.show();
     }
+
+
+
 
     private void onBookClick(Book book, int position) {
         Bundle bundle = new Bundle();
