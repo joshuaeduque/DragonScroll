@@ -32,6 +32,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private NavController navController;
     private AppDatabase database;
     private BookDao bookDao;
 
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         // Configure navigation
         if (navHostFragment != null) {
             // Get the activity's NavController
-            NavController navController = navHostFragment.getNavController();
+            navController = navHostFragment.getNavController();
             // Setup NavigationUI with our AppBarConfiguration
             NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
             // Setup NavigationUI with the BottomNavigationView and NavController
@@ -94,6 +95,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize the book database data access objects
         bookDao = database.bookDao();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if(navController != null) {
+            return navController.navigateUp();
+        }
+        return super.onSupportNavigateUp();
     }
 
     /**
