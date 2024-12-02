@@ -157,9 +157,6 @@ public class HomeFragment extends Fragment {
         alert.show();
     }
 
-
-
-
     private void onBookClick(Book book, int position) {
         Bundle bundle = new Bundle();
 
