@@ -10,10 +10,17 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.teamoranges.dragonscroll.models.Book;
@@ -43,6 +50,7 @@ public class HomeFragment extends Fragment {
     private NavController navController;
 
     private TextView noBooksTextView;
+    private LinearLayout inputContainer;
 
     /**
      * Constructor for the HomeFragment
@@ -122,26 +130,68 @@ public class HomeFragment extends Fragment {
 
         // Set FloatingActionButton on click listener
         FloatingActionButton floatingActionButton = view.findViewById(R.id.floatingActionButton);
-        floatingActionButton.setOnClickListener(this::onFloatingActionButtonClicked);
+        floatingActionButton.setOnClickListener(v -> showAddBookDialog());
 
         return view;
     }
-
+    
     /**
-     * Method that runs the Floating Action Button is clicked.
-     * @param view Current view (View)
-     */
-    private void onFloatingActionButtonClicked(View view) {
-        // Create new book
-        Book book = new Book();
-        book.setTitle(getRandomTitle());
-        book.setAuthor("No Author");
+    * Method that runs when the floating action button is clicked to add a new book.
+    */
+    private void showAddBookDialog() {
+        Context context = requireContext();
 
-        // Add book and update view
-        addBook(book);
+        // Create a LinearLayout to hold the EditTexts
+        LinearLayout layout = new LinearLayout(context);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(16, 16, 16, 16);
 
-        // Update noBooksTextView visibility
-        updateNoBooksTextViewVisibility();
+        // Create EditText for book title
+        EditText titleEditText = new EditText(context);
+        titleEditText.setHint("Book Title");
+        layout.addView(titleEditText);  // Add to layout
+
+        // Create EditText for author
+        EditText authorEditText = new EditText(context);
+        authorEditText.setHint("Author");
+        layout.addView(authorEditText);  // Add to layout
+
+        // Create AlertDialog
+        AlertDialog.Builder alert = new AlertDialog.Builder(context)
+                .setMessage("Enter book details")
+                .setView(layout);  // Set the layout as the view
+
+        // Set AlertDialog positive button on click listener
+        alert.setPositiveButton("Save", (dialog, button) -> {
+            // Get text from EditTexts
+            String title = titleEditText.getText().toString().trim();
+            String author = authorEditText.getText().toString().trim();
+
+            // Validate inputs
+            if (title.isEmpty() || author.isEmpty()) {
+                Toast.makeText(context, "Please enter both title and author", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            // Create a new Book object
+            Book book = new Book();
+            book.setTitle(title);
+            book.setAuthor(author);
+
+            // Add the book to the list
+            addBook(book);
+
+            // Notify user
+            Toast.makeText(context, "Book added!", Toast.LENGTH_SHORT).show();
+        });
+
+        // Set AlertDialog negative button with empty listener
+        alert.setNegativeButton("Cancel", (dialog, button) -> {
+            // Do nothing on cancel
+        });
+
+        // Show the AlertDialog
+        alert.show();
     }
 
     /**
@@ -230,24 +280,5 @@ public class HomeFragment extends Fragment {
         // Notify the adapter
         bookAdapter.notifyItemRemoved(position);
         bookAdapter.notifyItemRangeChanged(position, bookList.size());
-    }
-
-    /**
-     * Method that generates a random title for a newly created Book.
-     * @return String of the title of the Book.
-     */
-    private String getRandomTitle() {
-        // Create a list of random adjectives and nouns
-        // This should really be a static array.
-        String[] adjectives = {"Lost", "Hidden", "Secret", "Dark", "Silent", "Ancient", "Haunted"};
-        String[] nouns = {"Kingdom", "Garden", "Dreams", "Echoes", "Stars", "Journey", "Legacy"};
-
-        // Return a string with random adjective and noun indices
-        Random random = new Random();
-        return String.format(
-                "%s %s",
-                adjectives[random.nextInt(adjectives.length)],
-                nouns[random.nextInt(nouns.length)]
-        );
     }
 }
