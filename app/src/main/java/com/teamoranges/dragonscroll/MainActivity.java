@@ -3,10 +3,10 @@ package com.teamoranges.dragonscroll;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -19,22 +19,107 @@ import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+/**
+ * MainActivity is a java class for the sole activity of the app. It configures things like the app's theme,
+ * {@link BottomNavigationView}, and {@link AppDatabase}.
+ * @author Joshua Duque
+ * @author Mateo Garcia
+ * @author Emiliano Garza
+ * @author Samatha Poole
+ * @author Alaine Liserio
+ * UTSA CS 3443 - Team Oranges Project
+ * Fall 2024
+ */
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = "MainActivity";
 
+    private NavController navController;
     private AppDatabase database;
     private BookDao bookDao;
 
+    /**
+     * Method that runs when the app is started.
+     * @param savedInstanceState If the activity is being re-initialized after
+     *     previously being shut down then this Bundle contains the data it most
+     *     recently supplied in {@link #onSaveInstanceState}.  <b><i>Note: Otherwise it is null.</i></b>
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        // Setup the view with a theme before it's created
+        configureTheme();
+
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView.
+            // I don't know why it does, but we're removing it for now.
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
+            return insets;
+        });
+
+        // Get the activity's BottomNavigationView
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
+
+        // Get the activity's NavHostFragment
+        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navHostFragment);
+
+        // Create an AppBarConfiguration
+        AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
+        ).build();
+
+        // Set activity's ActionBar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Configure navigation
+        if (navHostFragment != null) {
+            // Get the activity's NavController
+            navController = navHostFragment.getNavController();
+            // Setup NavigationUI with our AppBarConfiguration
+            NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
+            // Setup NavigationUI with the BottomNavigationView and NavController
+            NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
+        }
+
+        // Initialize the database.
+        // NOTE: Notice how we allow queries on the main thread. This is very bad but we have no
+        // time to scaffold out something proper. We'll use movie magic to reduce load times in
+        // the presentation.
+        database = Room.databaseBuilder(
+                getApplicationContext(), AppDatabase.class, "books-db"
+        ).allowMainThreadQueries().fallbackToDestructiveMigration().build();
+
+        // Initialize the book database data access objects
+        bookDao = database.bookDao();
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        if(navController != null) {
+            return navController.navigateUp();
+        }
+        return super.onSupportNavigateUp();
+    }
+
+    /**
+     * Method that configures the settings a user has inputted for the app
+     */
+    private void configureTheme() {
         // Get shared preferences
-        SharedPreferences sharedPreferences = getSharedPreferences(
-                getString(R.string.preference_file_key), MODE_PRIVATE);
+        String preferenceFileKey = getString(R.string.preference_file_key);
+        SharedPreferences sharedPreferences = getSharedPreferences(preferenceFileKey, MODE_PRIVATE);
+
+        // Check if we got shared preferences successfully
         if (sharedPreferences != null) {
-            // Change theme before view is created
+            // Check shared preferences for current theme
             String themesPreferenceKey = getString(R.string.themes_preference_key);
             String theme = sharedPreferences.getString(themesPreferenceKey, null);
+
+            // Set theme if it exists in shared preferences
             if (theme != null) {
                 switch (theme) {
                     case "theme_red":
@@ -76,59 +161,35 @@ public class MainActivity extends AppCompatActivity {
             Configuration configuration = getResources().getConfiguration();
             configuration.fontScale = textSizeMultiplier;
             getResources().updateConfiguration(configuration, getResources().getDisplayMetrics());
+            // Apply dark mode preference
+            String darkModePreferenceKey = getString(R.string.dark_mode_key);
+            String darkMode = sharedPreferences.getString(darkModePreferenceKey, "system");
+            switch (darkMode) {
+                case "light":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    break;
+                case "dark":
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    break;
+                default:
+                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+                    break;
+            }
         }
-
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            // Using systemBars.bottom adds unnecessary padding to the BottomNavigationView.
-            // I don't know why it does, but we're removing it for now.
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0);
-            return insets;
-        });
-
-        // Get the BottomNavigationView
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavView);
-
-        // Try getting NavHostFragment
-        NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navHostFragment);
-        if (navHostFragment == null)
-            return;
-
-        // Create an AppBarConfiguration
-        AppBarConfiguration appBarConfig = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_profile, R.id.navigation_settings
-        ).build();
-
-        // Set activity toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        // Get the NavController from the NavHostFragment
-        NavController navController = navHostFragment.getNavController();
-
-        // Setup NavigationUI with our AppBarConfiguration
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfig);
-        // Setup NavigationUI with the BottomNavigationView and NavController
-        NavigationUI.setupWithNavController(bottomNavigationView, navController, false);
-
-        // Create books database
-        // Notice how we're allowed queries on the main thread
-        // That's normally a big no-no but there's no time to scaffold
-        // something proper. Too bad!
-        database = Room.databaseBuilder(
-                getApplicationContext(), AppDatabase.class, "books-db"
-        ).allowMainThreadQueries().fallbackToDestructiveMigration().build();
-        bookDao = database.bookDao();
     }
 
+    /**
+     * Getter to return the database of the app.
+     * @return database of the app (AppDatabase)
+     */
     public AppDatabase getDatabase() {
         return database;
     }
 
+    /**
+     * Getter to return a Book's DAO.
+     * @return Book's DAO (BookDao)
+     */
     public BookDao getBookDao() {
         return bookDao;
     }

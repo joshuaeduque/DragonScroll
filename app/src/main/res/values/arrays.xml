@@ -51,4 +51,16 @@
         <item>theme_brown</item>
         <item>theme_gray</item>
     </string-array>
+    <!-- Dark Mode Preference -->
+    <string-array name="dark_mode_entries">
+        <item>System Default</item>
+        <item>Light</item>
+        <item>Dark</item>
+    </string-array>
+
+    <string-array name="dark_mode_values">
+        <item>system</item>
+        <item>light</item>
+        <item>dark</item>
+    </string-array>
 </resources>
