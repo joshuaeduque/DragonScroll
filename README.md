@@ -19,10 +19,9 @@ While DragonScroll supports light mode, is was developed with dark mode in mind 
 | <img src="/screenshots/home.png" height="25%"> | <img src="/screenshots/book.png" height="25%"> | <img src="/screenshots/profile.png" height="25%"> | <img src="/screenshots/settings.png" height="25%"> | <img src="/screenshots/themes.png" height="25%"> |
 
 ## UML Diagrams
-
-Class Diagram
-
-<img src="/screenshots/uml_class.jpg" height="25%">
+| Class | XML |
+| ---   | --- |
+| <img src="/screenshots/uml_class.jpg" height="25%"> | none |
 
 ## Contributors
 [<img src="https://github.com/emig23.png" width=100px height=100px>](https://github.com/emig23)
